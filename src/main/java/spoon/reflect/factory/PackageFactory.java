@@ -41,9 +41,19 @@ public class PackageFactory extends SubFactory implements Serializable {
 	private CtPackage rootPackage;
 
 	private static class CtRootPackage extends CtPackageImpl {
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = 1L;
+
 		{
 			setSimpleName(CtPackage.TOP_LEVEL_PACKAGE_NAME);
 			setParent(new CtElementImpl() {
+				/**
+				 *
+				 */
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public void accept(CtVisitor visitor) {
 
