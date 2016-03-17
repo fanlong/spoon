@@ -321,4 +321,13 @@ public class FactoryImpl implements Factory, Serializable {
 			return symbol;
 		}
 	}
+
+	private transient BindingFactory bindings;
+	
+	@Override
+	public BindingFactory Binding() {
+		if (bindings == null)
+			bindings = new BindingFactory(this);
+		return bindings;
+	}
 }

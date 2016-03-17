@@ -42,4 +42,6 @@ public interface Factory {
 	ConstructorFactory Constructor(); // used 3 times
 
 	InternalFactory Internal();
+	
+	BindingFactory Binding();
 }

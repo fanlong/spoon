@@ -19,6 +19,7 @@ package spoon.reflect.declaration;
 
 import java.util.Set;
 
+import spoon.reflect.binding.CtTypeBinding;
 import spoon.reflect.reference.CtPackageReference;
 
 /**
@@ -125,4 +126,14 @@ public interface CtPackage extends CtNamedElement {
 	 * 		new Set of types
 	 */
 	<T extends CtPackage> T setTypes(Set<CtType<?>> types);
+	
+	/**
+	 * Add a type binding to the package
+	 */
+	<T extends CtPackage> T addTypeBinding(CtTypeBinding typeBinding);
+	
+	/**
+	 * Remove a type binding to the package
+	 */
+	void removeTypeBinding(CtTypeBinding typeBinding);
 }

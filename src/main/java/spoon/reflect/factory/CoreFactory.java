@@ -17,6 +17,9 @@
 
 package spoon.reflect.factory;
 
+import spoon.reflect.binding.CtFieldBinding;
+import spoon.reflect.binding.CtMethodBinding;
+import spoon.reflect.binding.CtTypeBinding;
 import spoon.reflect.code.CtAnnotationFieldAccess;
 import spoon.reflect.code.CtArrayRead;
 import spoon.reflect.code.CtArrayWrite;
@@ -464,5 +467,4 @@ public interface CoreFactory {
 	 * @return
 	 */
 	<T> CtAnnotationFieldAccess<T> createAnnotationFieldAccess();
-
 }

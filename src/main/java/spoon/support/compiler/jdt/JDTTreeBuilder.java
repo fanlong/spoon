@@ -138,6 +138,10 @@ import org.eclipse.jdt.internal.compiler.lookup.TypeBinding;
 import org.eclipse.jdt.internal.compiler.lookup.TypeVariableBinding;
 import org.eclipse.jdt.internal.compiler.lookup.VariableBinding;
 import org.eclipse.jdt.internal.compiler.lookup.WildcardBinding;
+
+import spoon.reflect.binding.CtFieldBinding;
+import spoon.reflect.binding.CtMethodBinding;
+import spoon.reflect.binding.CtTypeBinding;
 import spoon.reflect.code.BinaryOperatorKind;
 import spoon.reflect.code.CtAnnotationFieldAccess;
 import spoon.reflect.code.CtArrayAccess;
@@ -445,6 +449,9 @@ public class JDTTreeBuilder extends ASTVisitor {
 		}
 
 		final Map<TypeBinding, CtTypeReference> bindingCache = new HashMap<TypeBinding, CtTypeReference>();
+		final Map<String, CtTypeBinding> typeBindingCache = new HashMap<String, CtTypeBinding>();
+		final Map<MethodBinding, CtMethodBinding> methodBindingCache = new HashMap<MethodBinding, CtMethodBinding>();
+		final Map<FieldBinding, CtFieldBinding> fieldBindingCache = new HashMap<FieldBinding, CtFieldBinding>();
 
 		public <T> CtTypeReference<T> getTypeReference(TypeBinding binding, TypeReference ref) {
 			CtTypeReference<T> ctRef = getTypeReference(binding);
@@ -455,11 +462,85 @@ public class JDTTreeBuilder extends ASTVisitor {
 			ctRef.setSimpleName(new String(createTypeName(ref.getTypeName())));
 			return ctRef;
 		}
-
+		
+		CtFieldBinding getFieldBinding(FieldBinding binding) {
+			if (fieldBindingCache.containsKey(binding))
+				return fieldBindingCache.get(binding);
+			CtFieldBinding ret = factory.Binding().createFieldBinding();
+			fieldBindingCache.put(binding, ret);
+			ret.setSimpleName(new String(binding.shortReadableName()));
+			ret.setType(getTypeBinding(binding.type));
+			ret.setDeclaringType(getTypeBinding(binding.declaringClass));
+			return ret;
+		}
+		
+		CtMethodBinding getMethodBinding(MethodBinding binding) {
+			if (methodBindingCache.containsKey(binding))
+				return methodBindingCache.get(binding);
+			CtMethodBinding ret = factory.Binding().createMethodBinding();
+			methodBindingCache.put(binding, ret);
+			ret.setSimpleName(new String(binding.shortReadableName()));
+			ret.setReturnType(getTypeBinding(binding.returnType));
+			ret.setDeclaringType(getTypeBinding(binding.declaringClass));
+			for (TypeBinding b : binding.parameters) {
+				ret.addParameter(getTypeBinding(b));
+			}
+			return ret;
+		}
+		
+		String getTypeBindingSig(TypeBinding binding) {
+			if (binding instanceof ReferenceBinding) { 
+				ReferenceBinding rbinding = (ReferenceBinding) binding;
+				if (rbinding.fPackage != null)
+					return new String(rbinding.fPackage.readableName()).concat(new String(rbinding.qualifiedSourceName()));
+			}
+			return new String(binding.qualifiedSourceName());
+		}
+		
+		CtTypeBinding getTypeBinding(TypeBinding binding) {
+			String bindingSig = getTypeBindingSig(binding);
+			if (typeBindingCache.containsKey(bindingSig))
+				return typeBindingCache.get(bindingSig);
+			CtTypeBinding ret = factory.Binding().createTypeBinding();
+			typeBindingCache.put(bindingSig, ret);
+			ret.setQualifiedName(new String(binding.qualifiedSourceName()));
+			if (binding instanceof ReferenceBinding) {
+				ReferenceBinding rbinding = (ReferenceBinding) binding;
+				for (FieldBinding b : rbinding.fields()) {
+					CtFieldBinding fb = getFieldBinding(b);
+					ret.addField(fb);
+				}
+				for (MethodBinding b : rbinding.methods()) {
+					ret.addMethod(getMethodBinding(b));
+				}
+				if (rbinding.fPackage != null) {
+					CtPackage p = factory.Package().getOrCreate(new String(rbinding.fPackage.readableName()));
+					p.addTypeBinding(ret);
+					ret.setPackage(p);
+				}
+				
+				if (rbinding.superclass() != null)
+					ret.setSuperType(getTypeBinding(rbinding.superclass()));
+				
+				for (ReferenceBinding rb: rbinding.superInterfaces()) {
+					ret.addInterface(getTypeBinding(rb));
+				}
+			}
+			
+			return ret;
+		}
+		
 		@SuppressWarnings("unchecked")
 		public <T> CtTypeReference<T> getTypeReference(TypeBinding binding) {
 			if (binding == null) {
 				return null;
+			}
+			// We are going to force Spoon to store all previously unseen bindings
+			if (binding instanceof ReferenceBinding) {
+				ReferenceBinding rb = (ReferenceBinding) binding;
+				if (rb.fPackage != null)
+					if (!typeBindingCache.containsKey(getTypeBindingSig(rb)))
+						getTypeBinding(binding);
 			}
 
 			CtTypeReference<?> ref = null;

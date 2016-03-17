@@ -17,12 +17,14 @@
 
 package spoon.support.reflect.declaration;
 
+import spoon.reflect.binding.CtTypeBinding;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.CtPackage;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.reference.CtPackageReference;
 import spoon.reflect.visitor.CtVisitor;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -37,6 +39,8 @@ public class CtPackageImpl extends CtNamedElementImpl implements CtPackage {
 	private Set<CtPackage> packs = new TreeSet<CtPackage>();
 
 	private Set<CtType<?>> types = new TreeSet<CtType<?>>();
+	
+	private ArrayList<CtTypeBinding> bindings = new ArrayList<CtTypeBinding>();
 
 	public CtPackageImpl() {
 		super();
@@ -155,6 +159,17 @@ public class CtPackageImpl extends CtNamedElementImpl implements CtPackage {
 	@Override
 	public String toString() {
 		return getQualifiedName();
+	}
+
+	@Override
+	public <T extends CtPackage> T addTypeBinding(CtTypeBinding typeBinding) {
+		bindings.add(typeBinding);
+		return (T) this;
+	}
+
+	@Override
+	public void removeTypeBinding(CtTypeBinding typeBinding) {
+		bindings.remove(typeBinding);
 	}
 
 }
