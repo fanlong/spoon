@@ -19,6 +19,9 @@ package spoon.reflect.visitor;
 
 import org.apache.log4j.Level;
 import spoon.compiler.Environment;
+import spoon.reflect.binding.CtFieldBinding;
+import spoon.reflect.binding.CtMethodBinding;
+import spoon.reflect.binding.CtTypeBinding;
 import spoon.reflect.code.BinaryOperatorKind;
 import spoon.reflect.code.CtAnnotationFieldAccess;
 import spoon.reflect.code.CtArrayAccess;
@@ -2281,5 +2284,17 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 
 	public <T> void visitCtUnboundVariableReference(CtUnboundVariableReference<T> reference) {
 		write(reference.getSimpleName());
+	}
+	
+	@Override
+	public void visitCtTypeBinding(CtTypeBinding b) {
+	}
+	
+	@Override
+	public void visitCtFieldBinding(CtFieldBinding b) {
+	}
+	
+	@Override
+	public void visitCtMethodBinding(CtMethodBinding b) {
 	}
 }

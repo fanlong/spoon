@@ -21,6 +21,7 @@ import java.util.Stack;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import spoon.reflect.binding.CtBinding;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtNamedElement;
 import spoon.reflect.reference.CtReference;
@@ -55,6 +56,12 @@ public class SpoonTreeBuilder extends CtScanner {
 							+ ((CtNamedElement) getUserObject())
 							.getSimpleName();
 				}
+				else if (getUserObject() instanceof CtBinding) {
+					return getASTNodeName()
+							+ " - "
+							+ ((CtBinding) getUserObject())
+							.getSimpleName();
+				}
 				return getASTNodeName() + " - "
 						+ getUserObject().toString();
 			}
@@ -79,6 +86,28 @@ public class SpoonTreeBuilder extends CtScanner {
 	public void exitReference(CtReference e) {
 		nodes.pop();
 		super.exitReference(e);
+	}
+	
+	@Override
+	public void enterBinding(CtBinding b) {
+		createNode(b);
+		super.enterBinding(b);
+	}
+	
+	@Override
+	public void exitBinding(CtBinding b) {
+		nodes.pop();
+		super.exitBinding(b);
+	}
+	
+	@Override
+	public void revisitBinding(CtBinding b) {
+		if (!b.getSimpleName().contains("?"))
+			createNode(b.getReference());
+		else
+			createNode(b.getSimpleName());
+		super.revisitBinding(b);
+		nodes.pop();
 	}
 
 	@Override

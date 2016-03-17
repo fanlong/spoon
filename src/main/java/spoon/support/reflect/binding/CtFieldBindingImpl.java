@@ -1,11 +1,19 @@
 package spoon.support.reflect.binding;
 
+import java.io.Serializable;
+
 import spoon.reflect.binding.CtFieldBinding;
 import spoon.reflect.binding.CtTypeBinding;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtFieldReference;
+import spoon.reflect.visitor.CtVisitor;
 
-public class CtFieldBindingImpl implements CtFieldBinding {
+public class CtFieldBindingImpl implements CtFieldBinding, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private transient Factory factory;
 	
@@ -62,6 +70,11 @@ public class CtFieldBindingImpl implements CtFieldBinding {
 	public <T extends CtFieldBinding> T setDeclaringType(CtTypeBinding typeBinding) {
 		this.declaringType = typeBinding;
 		return (T) this;
+	}
+
+	@Override
+	public void accept(CtVisitor visitor) {
+		visitor.visitCtFieldBinding(this);
 	}
 
 }

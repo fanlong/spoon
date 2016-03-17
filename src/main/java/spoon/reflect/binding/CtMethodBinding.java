@@ -5,20 +5,18 @@ import java.util.List;
 import spoon.processing.FactoryAccessor;
 import spoon.reflect.declaration.CtNamedElement;
 import spoon.reflect.reference.CtExecutableReference;
+import spoon.reflect.reference.CtTypeReference;
+import spoon.reflect.visitor.CtVisitable;
 
-public interface CtMethodBinding extends FactoryAccessor {
+public interface CtMethodBinding extends CtBinding {
 	
 	<T extends CtMethodBinding> T setSimpleName(String name);
-	
-	String getSimpleName();
 	
 	CtTypeBinding getDeclaringType();
 	
 	CtTypeBinding getReturnType();
 	
 	List<CtTypeBinding> getParameterTypes();
-	
-	CtExecutableReference<?> getReference();
 
 	<T extends CtMethodBinding> T setReturnType(CtTypeBinding typeBinding);
 	
@@ -31,4 +29,6 @@ public interface CtMethodBinding extends FactoryAccessor {
 	boolean isConstructor();
 	
 	boolean isStatic();
+	
+	CtExecutableReference<?> getReference();
 }

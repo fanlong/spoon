@@ -11,6 +11,7 @@ import spoon.reflect.declaration.CtPackage;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtTypeReference;
+import spoon.reflect.visitor.CtVisitor;
 
 public class CtTypeBindingImpl implements CtTypeBinding, Serializable {
 
@@ -142,6 +143,11 @@ public class CtTypeBindingImpl implements CtTypeBinding, Serializable {
 	@Override
 	public void setFactory(Factory factory) {
 		this.factory = factory;
+	}
+
+	@Override
+	public void accept(CtVisitor visitor) {
+		visitor.visitCtTypeBinding(this);
 	}
 
 }

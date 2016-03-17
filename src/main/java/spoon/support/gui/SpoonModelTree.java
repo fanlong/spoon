@@ -75,6 +75,7 @@ public class SpoonModelTree extends JFrame implements KeyListener,
 	public SpoonModelTree(Factory factory) {
 		super();
 		SpoonTreeBuilder cst = new SpoonTreeBuilder();
+		cst.initializeBindingVisit();
 		cst.scan(factory.Package().getRootPackage());
 		this.factory = factory;
 		root = cst.getRoot();

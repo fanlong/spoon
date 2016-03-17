@@ -1,5 +1,6 @@
 package spoon.support.reflect.binding;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +9,14 @@ import spoon.reflect.binding.CtTypeBinding;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtTypeReference;
+import spoon.reflect.visitor.CtVisitor;
 
-public class CtMethodBindingImpl implements CtMethodBinding {
+public class CtMethodBindingImpl implements CtMethodBinding, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private transient Factory factory;
 	
@@ -103,6 +110,12 @@ public class CtMethodBindingImpl implements CtMethodBinding {
 	@Override
 	public boolean isStatic() {
 		return isstatic;
+	}
+
+	@Override
+	public void accept(CtVisitor visitor) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

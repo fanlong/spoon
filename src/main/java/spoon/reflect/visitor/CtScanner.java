@@ -17,6 +17,10 @@
 
 package spoon.reflect.visitor;
 
+import spoon.reflect.binding.CtBinding;
+import spoon.reflect.binding.CtFieldBinding;
+import spoon.reflect.binding.CtMethodBinding;
+import spoon.reflect.binding.CtTypeBinding;
 import spoon.reflect.code.CtAnnotationFieldAccess;
 import spoon.reflect.code.CtArrayAccess;
 import spoon.reflect.code.CtArrayRead;
@@ -96,6 +100,8 @@ import spoon.reflect.reference.CtUnboundVariableReference;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
+import java.util.IdentityHashMap;
+import java.util.List;
 
 /**
  * This visitor implements a deep-search scan on the metamodel.
@@ -134,6 +140,15 @@ public abstract class CtScanner implements CtVisitor {
 	 * reference. To be overridden to implement specific scanners.
 	 */
 	protected void exitReference(CtReference e) {
+	}
+	
+	protected void enterBinding(CtBinding b) {
+	}
+	
+	protected void exitBinding(CtBinding b) {
+	}
+	
+	protected void revisitBinding(CtBinding b) {
 	}
 
 	/**
@@ -590,6 +605,8 @@ public abstract class CtScanner implements CtVisitor {
 		scan(ctPackage.getAnnotations());
 		scan(ctPackage.getPackages());
 		scan(ctPackage.getTypes());
+		if (bindingRec != null)
+			scanBinding(ctPackage.getTypeBindings());
 		exit(ctPackage);
 	}
 
@@ -787,5 +804,63 @@ public abstract class CtScanner implements CtVisitor {
 		scanReferences(f.getTypeCasts());
 		scan(f.getTarget());
 		exit(f);
+	}
+	
+	IdentityHashMap<CtBinding, Integer> bindingRec = null;
+	
+	public void initializeBindingVisit() {
+		bindingRec = new IdentityHashMap<CtBinding, Integer>();
+	}
+	
+	@Override
+	public void visitCtTypeBinding(CtTypeBinding b) {
+		if (bindingRec.containsKey(b)) {
+			revisitBinding(b);
+			return;
+		}
+		bindingRec.put(b, 0);
+		enterBinding(b);
+		scanBinding(b.getFields());
+		scanBinding(b.getMethods());
+		exitBinding(b);
+		bindingRec.put(b, 1);
+	}
+	
+	public <T extends CtBinding> void scanBinding(List<T> bindings) {
+		if (bindings != null)
+			for (CtBinding b : bindings)
+				scanBinding(b);
+	}
+	
+	public <T extends CtBinding> void scanBinding(T b) {
+		if (b != null)
+			b.accept(this);
+	}
+
+	@Override
+	public void visitCtFieldBinding(CtFieldBinding b) {
+		if (bindingRec.containsKey(b)) {
+			revisitBinding(b);
+			return;
+		}
+		bindingRec.put(b, 0);
+		enterBinding(b);
+		scanBinding(b.getType());
+		exitBinding(b);
+		bindingRec.put(b, 1);
+	}
+	
+	@Override
+	public void visitCtMethodBinding(CtMethodBinding b) {
+		if (bindingRec.containsKey(b)) {
+			revisitBinding(b);
+			return;
+		}
+		bindingRec.put(b, 0);
+		enterBinding(b);
+		scanBinding(b.getReturnType());
+		scanBinding(b.getParameterTypes());
+		exitBinding(b);
+		bindingRec.put(b, 1);
 	}
 }

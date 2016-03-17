@@ -17,6 +17,9 @@
 
 package spoon.reflect.visitor;
 
+import spoon.reflect.binding.CtFieldBinding;
+import spoon.reflect.binding.CtMethodBinding;
+import spoon.reflect.binding.CtTypeBinding;
 import spoon.reflect.code.CtAbstractInvocation;
 import spoon.reflect.code.CtAnnotationFieldAccess;
 import spoon.reflect.code.CtArrayAccess;
@@ -837,5 +840,17 @@ public abstract class CtInheritanceScanner implements CtVisitor {
 	}
 
 	public void scanCtCodeSnippet(CtCodeSnippet snippet) {
+	}
+	
+	@Override
+	public void visitCtTypeBinding(CtTypeBinding b) {
+	}
+	
+	@Override
+	public void visitCtFieldBinding(CtFieldBinding b) {
+	}
+	
+	@Override
+	public void visitCtMethodBinding(CtMethodBinding b) {
 	}
 }

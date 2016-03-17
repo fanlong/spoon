@@ -17,6 +17,9 @@
 
 package spoon.support.reflect.eval;
 
+import spoon.reflect.binding.CtFieldBinding;
+import spoon.reflect.binding.CtMethodBinding;
+import spoon.reflect.binding.CtTypeBinding;
 import spoon.reflect.code.BinaryOperatorKind;
 import spoon.reflect.code.CtAnnotationFieldAccess;
 import spoon.reflect.code.CtArrayAccess;
@@ -828,5 +831,17 @@ public class VisitorPartialEvaluator implements CtVisitor, PartialEvaluator {
 	@Override
 	public <T> void visitCtSuperAccess(CtSuperAccess<T> f) {
 		setResult(f.getFactory().Core().clone(f));
+	}
+	
+	@Override
+	public void visitCtTypeBinding(CtTypeBinding b) {
+	}
+	
+	@Override
+	public void visitCtFieldBinding(CtFieldBinding b) {
+	}
+	
+	@Override
+	public void visitCtMethodBinding(CtMethodBinding b) {
 	}
 }

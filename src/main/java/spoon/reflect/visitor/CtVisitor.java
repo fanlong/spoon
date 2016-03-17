@@ -17,6 +17,9 @@
 
 package spoon.reflect.visitor;
 
+import spoon.reflect.binding.CtFieldBinding;
+import spoon.reflect.binding.CtMethodBinding;
+import spoon.reflect.binding.CtTypeBinding;
 import spoon.reflect.code.CtAnnotationFieldAccess;
 import spoon.reflect.code.CtArrayAccess;
 import spoon.reflect.code.CtArrayRead;
@@ -454,4 +457,11 @@ public interface CtVisitor {
 	<T> void visitCtFieldWrite(CtFieldWrite<T> fieldWrite);
 
 	<T> void visitCtSuperAccess(CtSuperAccess<T> f);
+	
+	/**
+	 * Visits a binding
+	 */
+	void visitCtTypeBinding(CtTypeBinding b);
+	void visitCtMethodBinding(CtMethodBinding b);
+	void visitCtFieldBinding(CtFieldBinding b);
 }

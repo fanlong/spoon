@@ -25,6 +25,7 @@ import spoon.reflect.reference.CtPackageReference;
 import spoon.reflect.visitor.CtVisitor;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -170,6 +171,11 @@ public class CtPackageImpl extends CtNamedElementImpl implements CtPackage {
 	@Override
 	public void removeTypeBinding(CtTypeBinding typeBinding) {
 		bindings.remove(typeBinding);
+	}
+
+	@Override
+	public List<CtTypeBinding> getTypeBindings() {
+		return bindings;
 	}
 
 }

@@ -17,6 +17,9 @@
 
 package spoon.support.visitor;
 
+import spoon.reflect.binding.CtFieldBinding;
+import spoon.reflect.binding.CtMethodBinding;
+import spoon.reflect.binding.CtTypeBinding;
 import spoon.reflect.code.CtAnnotationFieldAccess;
 import spoon.reflect.code.CtArrayAccess;
 import spoon.reflect.code.CtArrayRead;
@@ -693,5 +696,17 @@ public class SignaturePrinter implements CtVisitor {
 	@Override
 	public <T> void visitCtSuperAccess(CtSuperAccess<T> f) {
 		write(f.getType().getQualifiedName() + ".super");
+	}
+	
+	@Override
+	public void visitCtTypeBinding(CtTypeBinding b) {
+	}
+	
+	@Override
+	public void visitCtFieldBinding(CtFieldBinding b) {
+	}
+	
+	@Override
+	public void visitCtMethodBinding(CtMethodBinding b) {
 	}
 }
