@@ -17,6 +17,9 @@
 
 package spoon.support.reflect.eval;
 
+import java.lang.annotation.Annotation;
+import java.util.List;
+
 import spoon.reflect.binding.CtFieldBinding;
 import spoon.reflect.binding.CtMethodBinding;
 import spoon.reflect.binding.CtTypeBinding;
@@ -68,8 +71,8 @@ import spoon.reflect.code.CtTry;
 import spoon.reflect.code.CtTryWithResource;
 import spoon.reflect.code.CtTypeAccess;
 import spoon.reflect.code.CtUnaryOperator;
-import spoon.reflect.code.CtVariableRead;
 import spoon.reflect.code.CtVariableAccess;
+import spoon.reflect.code.CtVariableRead;
 import spoon.reflect.code.CtVariableWrite;
 import spoon.reflect.code.CtWhile;
 import spoon.reflect.declaration.CtAnnotation;
@@ -91,14 +94,14 @@ import spoon.reflect.declaration.CtTypedElement;
 import spoon.reflect.declaration.CtVariable;
 import spoon.reflect.declaration.ModifierKind;
 import spoon.reflect.eval.PartialEvaluator;
+import spoon.reflect.internal.CtCircularTypeReference;
 import spoon.reflect.internal.CtImplicitArrayTypeReference;
+import spoon.reflect.internal.CtImplicitTypeReference;
 import spoon.reflect.reference.CtArrayTypeReference;
 import spoon.reflect.reference.CtCatchVariableReference;
-import spoon.reflect.internal.CtCircularTypeReference;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtFieldReference;
 import spoon.reflect.reference.CtGenericElementReference;
-import spoon.reflect.internal.CtImplicitTypeReference;
 import spoon.reflect.reference.CtLocalVariableReference;
 import spoon.reflect.reference.CtPackageReference;
 import spoon.reflect.reference.CtParameterReference;
@@ -109,9 +112,6 @@ import spoon.reflect.reference.CtUnboundVariableReference;
 import spoon.reflect.reference.CtVariableReference;
 import spoon.reflect.visitor.CtVisitor;
 import spoon.support.util.RtHelper;
-
-import java.lang.annotation.Annotation;
-import java.util.List;
 
 /**
  * This visitor implements a simple partial evaluator for the program
@@ -246,22 +246,22 @@ public class VisitorPartialEvaluator implements CtVisitor, PartialEvaluator {
 				break;
 			case MINUS:
 				res.setValue(convert(operator.getType(),
-								((Number) leftObject).doubleValue() - ((Number) rightObject).doubleValue()));
+						((Number) leftObject).doubleValue() - ((Number) rightObject).doubleValue()));
 				break;
 			case MUL:
 				res.setValue(convert(operator.getType(),
-								((Number) leftObject).doubleValue() * ((Number) rightObject).doubleValue()));
+						((Number) leftObject).doubleValue() * ((Number) rightObject).doubleValue()));
 				break;
 			case DIV:
 				res.setValue(convert(operator.getType(),
-								((Number) leftObject).doubleValue() / ((Number) rightObject).doubleValue()));
+						((Number) leftObject).doubleValue() / ((Number) rightObject).doubleValue()));
 				break;
 			case PLUS:
 				if ((leftObject instanceof String) || (rightObject instanceof String)) {
 					res.setValue("" + leftObject + rightObject);
 				} else {
 					res.setValue(convert(operator.getType(),
-									((Number) leftObject).doubleValue() + ((Number) rightObject).doubleValue()));
+							((Number) leftObject).doubleValue() + ((Number) rightObject).doubleValue()));
 				}
 				break;
 			case BITAND:
@@ -797,8 +797,8 @@ public class VisitorPartialEvaluator implements CtVisitor, PartialEvaluator {
 		CtWhile w = whileLoop.getFactory().Core().clone(whileLoop);
 		w.setLoopingExpression(evaluate(w, whileLoop.getLoopingExpression()));
 		// If lopping Expression always false
-		if ((whileLoop.getLoopingExpression() instanceof CtLiteral) && !((CtLiteral<Boolean>) whileLoop
-				.getLoopingExpression()).getValue()) {
+		if ((whileLoop.getLoopingExpression() instanceof CtLiteral)
+				&& !((CtLiteral<Boolean>) whileLoop.getLoopingExpression()).getValue()) {
 			setResult(null);
 			return;
 		}
@@ -832,15 +832,15 @@ public class VisitorPartialEvaluator implements CtVisitor, PartialEvaluator {
 	public <T> void visitCtSuperAccess(CtSuperAccess<T> f) {
 		setResult(f.getFactory().Core().clone(f));
 	}
-	
+
 	@Override
 	public void visitCtTypeBinding(CtTypeBinding b) {
 	}
-	
+
 	@Override
 	public void visitCtFieldBinding(CtFieldBinding b) {
 	}
-	
+
 	@Override
 	public void visitCtMethodBinding(CtMethodBinding b) {
 	}

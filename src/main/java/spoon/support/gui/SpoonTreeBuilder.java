@@ -44,26 +44,19 @@ public class SpoonTreeBuilder extends CtScanner {
 			private static final long serialVersionUID = 1L;
 
 			private String getASTNodeName() {
-				// the end user needs to know the interface, not the implementation
+				// the end user needs to know the interface, not the
+				// implementation
 				return getUserObject().getClass().getSimpleName().replaceAll("Impl$", "");
 			}
 
 			@Override
 			public String toString() {
 				if (getUserObject() instanceof CtNamedElement) {
-					return getASTNodeName()
-							+ " - "
-							+ ((CtNamedElement) getUserObject())
-							.getSimpleName();
+					return getASTNodeName() + " - " + ((CtNamedElement) getUserObject()).getSimpleName();
+				} else if (getUserObject() instanceof CtBinding) {
+					return getASTNodeName() + " - " + ((CtBinding) getUserObject()).getSimpleName();
 				}
-				else if (getUserObject() instanceof CtBinding) {
-					return getASTNodeName()
-							+ " - "
-							+ ((CtBinding) getUserObject())
-							.getSimpleName();
-				}
-				return getASTNodeName() + " - "
-						+ getUserObject().toString();
+				return getASTNodeName() + " - " + getUserObject().toString();
 			}
 		};
 		nodes.peek().add(node);
@@ -87,25 +80,26 @@ public class SpoonTreeBuilder extends CtScanner {
 		nodes.pop();
 		super.exitReference(e);
 	}
-	
+
 	@Override
 	public void enterBinding(CtBinding b) {
 		createNode(b);
 		super.enterBinding(b);
 	}
-	
+
 	@Override
 	public void exitBinding(CtBinding b) {
 		nodes.pop();
 		super.exitBinding(b);
 	}
-	
+
 	@Override
 	public void revisitBinding(CtBinding b) {
-		if (!b.getSimpleName().contains("?"))
+		if (!b.getSimpleName().contains("?")) {
 			createNode(b.getReference());
-		else
+		} else {
 			createNode(b.getSimpleName());
+		}
 		super.revisitBinding(b);
 		nodes.pop();
 	}

@@ -17,7 +17,18 @@
 
 package spoon.reflect.visitor;
 
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Stack;
+
 import org.apache.log4j.Level;
+
 import spoon.compiler.Environment;
 import spoon.reflect.binding.CtFieldBinding;
 import spoon.reflect.binding.CtMethodBinding;
@@ -97,14 +108,14 @@ import spoon.reflect.declaration.CtTypeParameter;
 import spoon.reflect.declaration.ModifierKind;
 import spoon.reflect.declaration.ParentNotInitializedException;
 import spoon.reflect.factory.Factory;
+import spoon.reflect.internal.CtCircularTypeReference;
 import spoon.reflect.internal.CtImplicitArrayTypeReference;
+import spoon.reflect.internal.CtImplicitTypeReference;
 import spoon.reflect.reference.CtArrayTypeReference;
 import spoon.reflect.reference.CtCatchVariableReference;
-import spoon.reflect.internal.CtCircularTypeReference;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtFieldReference;
 import spoon.reflect.reference.CtGenericElementReference;
-import spoon.reflect.internal.CtImplicitTypeReference;
 import spoon.reflect.reference.CtLocalVariableReference;
 import spoon.reflect.reference.CtPackageReference;
 import spoon.reflect.reference.CtParameterReference;
@@ -115,16 +126,6 @@ import spoon.reflect.reference.CtUnboundVariableReference;
 import spoon.support.reflect.cu.CtLineElementComparator;
 import spoon.support.util.SortedList;
 import spoon.support.visitor.SignaturePrinter;
-
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Stack;
 
 /**
  * A visitor for generating Java code from the program compile-time model.
@@ -439,7 +440,8 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 		if (e != null) {
 			context.elementStack.push(e);
 			if (env.isPreserveLineNumbers()) {
-				context.noNewLines = e.getPosition() == null || e.getPosition().getCompilationUnit() != sourceCompilationUnit;
+				context.noNewLines = e.getPosition() == null
+						|| e.getPosition().getCompilationUnit() != sourceCompilationUnit;
 				if (!(e instanceof CtNamedElement)) {
 					adjustPosition(e);
 				}
@@ -525,7 +527,8 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 		// System.out.print("===================");
 		// printCharArray(sbf.toString().toCharArray());
 		// System.out.println("===================");
-		if (e.getPosition() != null && e.getPosition().getCompilationUnit() != null && e.getPosition().getCompilationUnit() == sourceCompilationUnit) {
+		if (e.getPosition() != null && e.getPosition().getCompilationUnit() != null
+				&& e.getPosition().getCompilationUnit() == sourceCompilationUnit) {
 			while (line < e.getPosition().getLine()) {
 				insertLine();
 			}
@@ -533,7 +536,8 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 				if (!removeLine()) {
 					if (line > e.getPosition().getEndLine()) {
 						env.report(null, Level.WARN, e,
-								"cannot adjust position of " + e.getClass().getSimpleName() + " '" + e.getSignature() + "' " + " to match lines: " + line + " > [" + e.getPosition().getLine() + ", "
+								"cannot adjust position of " + e.getClass().getSimpleName() + " '" + e.getSignature()
+										+ "' " + " to match lines: " + line + " > [" + e.getPosition().getLine() + ", "
 										+ e.getPosition().getEndLine() + "]");
 					}
 					break;
@@ -562,7 +566,8 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 		}
 		try {
 			if ((e.getParent() instanceof CtBinaryOperator) || (e.getParent() instanceof CtUnaryOperator)) {
-				return (e instanceof CtTargetedExpression) || (e instanceof CtAssignment) || (e instanceof CtConditional) || (e instanceof CtUnaryOperator);
+				return (e instanceof CtTargetedExpression) || (e instanceof CtAssignment)
+						|| (e instanceof CtConditional) || (e instanceof CtUnaryOperator);
 			}
 			if (e.getParent() instanceof CtTargetedExpression) {
 				return (e instanceof CtBinaryOperator) || (e instanceof CtAssignment) || (e instanceof CtConditional);
@@ -675,7 +680,8 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 		enterCtExpression(operator);
 		boolean paren = false;
 		try {
-			paren = (operator.getParent() instanceof CtBinaryOperator) || (operator.getParent() instanceof CtUnaryOperator);
+			paren = (operator.getParent() instanceof CtBinaryOperator)
+					|| (operator.getParent() instanceof CtUnaryOperator);
 		} catch (ParentNotInitializedException ex) {
 			// nothing if we have no parent
 		}
@@ -721,8 +727,10 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 		if (caseStatement.getCaseExpression() != null) {
 			write("case ");
 			// writing enum case expression
-			if ((caseStatement.getCaseExpression() instanceof CtFieldAccess) && ((CtFieldAccess) caseStatement.getCaseExpression()).getVariable().getType().getQualifiedName()
-					.equals(((CtFieldAccess) caseStatement.getCaseExpression()).getVariable().getDeclaringType().getQualifiedName())) {
+			if ((caseStatement.getCaseExpression() instanceof CtFieldAccess)
+					&& ((CtFieldAccess) caseStatement.getCaseExpression()).getVariable().getType().getQualifiedName()
+							.equals(((CtFieldAccess) caseStatement.getCaseExpression()).getVariable().getDeclaringType()
+									.getQualifiedName())) {
 				write(((CtFieldAccess) caseStatement.getCaseExpression()).getVariable().getSimpleName());
 			} else {
 				scan(caseStatement.getCaseExpression());
@@ -798,7 +806,8 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 		lst.addAll(ctClass.getFields());
 		lst.addAll(ctClass.getMethods());
 
-		if ((ctClass.getSimpleName() == null || ctClass.getSimpleName().isEmpty()) && ctClass.getParent() != null && ctClass.getParent() instanceof CtNewClass) {
+		if ((ctClass.getSimpleName() == null || ctClass.getSimpleName().isEmpty()) && ctClass.getParent() != null
+				&& ctClass.getParent() instanceof CtNewClass) {
 			context.currentThis.push(((CtNewClass<?>) ctClass.getParent()).getType());
 		} else {
 			context.currentThis.push(ctClass.getReference());
@@ -971,7 +980,8 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 		write(" ");
 		write(f.getSimpleName());
 
-		if ((!f.isParentInitialized()) || !CtAnnotationType.class.isAssignableFrom(f.getParent().getClass()) || f.getModifiers().contains(ModifierKind.STATIC)) {
+		if ((!f.isParentInitialized()) || !CtAnnotationType.class.isAssignableFrom(f.getParent().getClass())
+				|| f.getModifiers().contains(ModifierKind.STATIC)) {
 			if (f.getDefaultExpression() != null) {
 				write(" = ");
 				scan(f.getDefaultExpression());
@@ -1222,7 +1232,8 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 			// It's a constructor (super or this)
 			writeActualTypeArguments(invocation.getExecutable());
 			CtType<?> parentType = invocation.getParent(CtType.class);
-			if (parentType != null && parentType.getQualifiedName() != null && parentType.getQualifiedName().equals(invocation.getExecutable().getDeclaringType().getQualifiedName())) {
+			if (parentType != null && parentType.getQualifiedName() != null && parentType.getQualifiedName()
+					.equals(invocation.getExecutable().getDeclaringType().getQualifiedName())) {
 				write("this");
 			} else {
 				if (invocation.getTarget() != null) {
@@ -1244,7 +1255,8 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 				scan(invocation.getTarget());
 				context.exitTarget();
 				write(".");
-			} else if (invocation.getExecutable().getActualTypeArguments() != null && invocation.getExecutable().getActualTypeArguments().size() > 0) {
+			} else if (invocation.getExecutable().getActualTypeArguments() != null
+					&& invocation.getExecutable().getActualTypeArguments().size() > 0) {
 				write("this.");
 			}
 			writeActualTypeArguments(invocation.getExecutable());
@@ -1271,9 +1283,7 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 
 	public static String byteToHex(byte b) {
 		// Returns hex String representation of byte b
-		char hexDigit[] = {
-				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
-		};
+		char hexDigit[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 		char[] array = { hexDigit[(b >> 4) & 0x0f], hexDigit[b & 0x0f] };
 		return new String(array);
 	}
@@ -1352,9 +1362,11 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 
 			SourcePosition position = literal.getPosition();
 			if (position != null) {
-				// the size of the string in the source code, the -1 is the size of the ' or " in the source code
+				// the size of the string in the source code, the -1 is the size
+				// of the ' or " in the source code
 				int stringLength = position.getSourceEnd() - position.getSourceStart() - 1;
-				// if the string in the source is not the same as the string in the literal, the string may contains special characters
+				// if the string in the source is not the same as the string in
+				// the literal, the string may contains special characters
 				mayContainsSpecialCharacter = stringLength != 1;
 			}
 			writeStringLiteral(new String(new char[] { (Character) literal.getValue() }), mayContainsSpecialCharacter);
@@ -1367,9 +1379,11 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 
 			SourcePosition position = literal.getPosition();
 			if (position != null) {
-				// the size of the string in the source code, the -1 is the size of the ' or " in the source code
+				// the size of the string in the source code, the -1 is the size
+				// of the ' or " in the source code
 				int stringLength = position.getSourceEnd() - position.getSourceStart() - 1;
-				// if the string in the source is not the same as the string in the literal, the string may contains special characters
+				// if the string in the source is not the same as the string in
+				// the literal, the string may contains special characters
 				mayContainsSpecialCharacters = ((String) literal.getValue()).length() != stringLength;
 			}
 			writeStringLiteral((String) literal.getValue(), mayContainsSpecialCharacters);
@@ -1476,7 +1490,8 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 			scan(m.getBody());
 			if (m.getBody().getPosition() != null) {
 				if (m.getBody().getPosition().getCompilationUnit() == sourceCompilationUnit) {
-					if (m.getBody().getStatements().isEmpty() || !(m.getBody().getStatements().get(m.getBody().getStatements().size() - 1) instanceof CtReturn)) {
+					if (m.getBody().getStatements().isEmpty() || !(m.getBody().getStatements()
+							.get(m.getBody().getStatements().size() - 1) instanceof CtReturn)) {
 						lineNumberMapping.put(line, m.getBody().getPosition().getEndLine());
 					}
 				} else {
@@ -1573,9 +1588,12 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 			context.ignoreEnclosingClass = true;
 		}
 
-		// JDT doesn't support new Foo<K>.Bar(); So we check that the parent of the constructor
-		// call and the declaring type of the type of the constructor call are equals or not.
-		// If yes, Bar is a intern class of Foo and we don't need to print fully qualified name.
+		// JDT doesn't support new Foo<K>.Bar(); So we check that the parent of
+		// the constructor
+		// call and the declaring type of the type of the constructor call are
+		// equals or not.
+		// If yes, Bar is a intern class of Foo and we don't need to print fully
+		// qualified name.
 		// See https://bugs.eclipse.org/bugs/show_bug.cgi?id=474593
 		if (getTopLevelType(ctConstructorCall).getReference().equals(ctConstructorCall.getType().getDeclaringType())
 				&& ctConstructorCall.getType().getDeclaringType().getActualTypeArguments().size() > 0) {
@@ -1675,7 +1693,8 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 	}
 
 	@Override
-	public <T, E extends CtExpression<?>> void visitCtExecutableReferenceExpression(CtExecutableReferenceExpression<T, E> expression) {
+	public <T, E extends CtExpression<?>> void visitCtExecutableReferenceExpression(
+			CtExecutableReferenceExpression<T, E> expression) {
 		enterCtExpression(expression);
 		scan(expression.getTarget());
 		write("::");
@@ -1837,8 +1856,7 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 		} else {
 			write(ref.getQualifiedName());
 		}
-		if ((!context.isInvocation || "?".equals(ref.getSimpleName()))
-				&& ref.getBounds() != null
+		if ((!context.isInvocation || "?".equals(ref.getSimpleName())) && ref.getBounds() != null
 				&& !ref.getBounds().isEmpty()) {
 			if (ref.isUpper()) {
 				write(" extends ");
@@ -1864,7 +1882,8 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 			write(ref.getSimpleName());
 		} else {
 			if (ref.getDeclaringType() != null) {
-				if (!context.currentThis.contains(ref.getDeclaringType()) || ref.getModifiers().contains(ModifierKind.STATIC) || hasDeclaringTypeWithGenerics(ref)) {
+				if (!context.currentThis.contains(ref.getDeclaringType())
+						|| ref.getModifiers().contains(ModifierKind.STATIC) || hasDeclaringTypeWithGenerics(ref)) {
 					if (!context.ignoreEnclosingClass) {
 						boolean ign = context.ignoreGenerics;
 						context.ignoreGenerics = false;
@@ -1894,7 +1913,8 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 	}
 
 	private <T> boolean hasDeclaringTypeWithGenerics(CtTypeReference<T> reference) {
-		// If current reference is a class declared in a method, we don't need this hack.
+		// If current reference is a class declared in a method, we don't need
+		// this hack.
 		if (reference.getDeclaration() == null) {
 			return false;
 		}
@@ -2062,7 +2082,7 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 	 * Writes formal type parameters given in parameter.
 	 *
 	 * @param params
-	 * 		List of formal type parameters.
+	 *            List of formal type parameters.
 	 * @return current instance of the {@link DefaultJavaPrettyPrinter}
 	 */
 	public DefaultJavaPrettyPrinter writeFormalTypeParameters(Collection<CtTypeReference<?>> params) {
@@ -2082,10 +2102,11 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 	}
 
 	/**
-	 * Writes actual type arguments in a {@link CtGenericElementReference} element.
+	 * Writes actual type arguments in a {@link CtGenericElementReference}
+	 * element.
 	 *
 	 * @param ctGenericElementReference
-	 * 		Reference with actual type arguments.
+	 *            Reference with actual type arguments.
 	 * @return current instance of the {@link DefaultJavaPrettyPrinter}
 	 */
 	public DefaultJavaPrettyPrinter writeActualTypeArguments(CtGenericElementReference ctGenericElementReference) {
@@ -2245,7 +2266,8 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 	 */
 	protected void writeStatement(CtStatement e) {
 		scan(e);
-		if (!((e instanceof CtBlock) || (e instanceof CtIf) || (e instanceof CtFor) || (e instanceof CtForEach) || (e instanceof CtWhile) || (e instanceof CtTry) || (e instanceof CtSwitch)
+		if (!((e instanceof CtBlock) || (e instanceof CtIf) || (e instanceof CtFor) || (e instanceof CtForEach)
+				|| (e instanceof CtWhile) || (e instanceof CtTry) || (e instanceof CtSwitch)
 				|| (e instanceof CtSynchronized) || (e instanceof CtClass))) {
 			write(";");
 		}
@@ -2285,15 +2307,15 @@ public class DefaultJavaPrettyPrinter implements CtVisitor, PrettyPrinter {
 	public <T> void visitCtUnboundVariableReference(CtUnboundVariableReference<T> reference) {
 		write(reference.getSimpleName());
 	}
-	
+
 	@Override
 	public void visitCtTypeBinding(CtTypeBinding b) {
 	}
-	
+
 	@Override
 	public void visitCtFieldBinding(CtFieldBinding b) {
 	}
-	
+
 	@Override
 	public void visitCtMethodBinding(CtMethodBinding b) {
 	}

@@ -697,15 +697,15 @@ public class SignaturePrinter implements CtVisitor {
 	public <T> void visitCtSuperAccess(CtSuperAccess<T> f) {
 		write(f.getType().getQualifiedName() + ".super");
 	}
-	
+
 	@Override
 	public void visitCtTypeBinding(CtTypeBinding b) {
 	}
-	
+
 	@Override
 	public void visitCtFieldBinding(CtFieldBinding b) {
 	}
-	
+
 	@Override
 	public void visitCtMethodBinding(CtMethodBinding b) {
 	}

@@ -17,9 +17,8 @@
 
 package spoon.reflect.factory;
 
-import spoon.reflect.binding.CtFieldBinding;
-import spoon.reflect.binding.CtMethodBinding;
-import spoon.reflect.binding.CtTypeBinding;
+import java.lang.annotation.Annotation;
+
 import spoon.reflect.code.CtAnnotationFieldAccess;
 import spoon.reflect.code.CtArrayRead;
 import spoon.reflect.code.CtArrayWrite;
@@ -89,8 +88,6 @@ import spoon.reflect.reference.CtParameterReference;
 import spoon.reflect.reference.CtTypeParameterReference;
 import spoon.reflect.reference.CtTypeReference;
 
-import java.lang.annotation.Annotation;
-
 /**
  * This interface defines the core creation methods for the meta-model (to be
  * implemented so that Spoon can manipulate other meta-model implementations).
@@ -107,9 +104,9 @@ public interface CoreFactory {
 	 * elements.
 	 *
 	 * @param <T>
-	 * 		the element's type
+	 *            the element's type
 	 * @param element
-	 * 		the element
+	 *            the element
 	 * @return a clone of <code>element</code>
 	 */
 	<T> T clone(T element);
@@ -357,9 +354,8 @@ public interface CoreFactory {
 	/**
 	 * Creates a source position.
 	 */
-	SourcePosition createSourcePosition(
-			CompilationUnit compilationUnit,
-			int start, int end, int[] lineSeparatorPositions);
+	SourcePosition createSourcePosition(CompilationUnit compilationUnit, int start, int end,
+			int[] lineSeparatorPositions);
 
 	/**
 	 * Creates a statement list.

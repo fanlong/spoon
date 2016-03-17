@@ -14,22 +14,22 @@ import spoon.reflect.visitor.CtVisitor;
 public class CtMethodBindingImpl implements CtMethodBinding, Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	private transient Factory factory;
-	
+
 	private String name;
-	
+
 	private CtTypeBinding declaringType;
-	
+
 	private CtTypeBinding returnType;
-	
+
 	private ArrayList<CtTypeBinding> parameters = new ArrayList<CtTypeBinding>();
-	
+
 	private boolean isstatic;
-	
+
 	@Override
 	public <T extends CtMethodBinding> T setSimpleName(String name) {
 		this.name = name;
@@ -58,8 +58,8 @@ public class CtMethodBindingImpl implements CtMethodBinding, Serializable {
 			tmp.add(r.getReference());
 		}
 		CtExecutableReference<?> ret = factory.Executable().createReference(
-				(CtTypeReference<Object>)declaringType.getReference(), isstatic, 
-				(CtTypeReference<Object>)returnType.getReference(), name, tmp);
+				(CtTypeReference<Object>) declaringType.getReference(), isstatic,
+				(CtTypeReference<Object>) returnType.getReference(), name, tmp);
 		return ret;
 	}
 
@@ -115,7 +115,7 @@ public class CtMethodBindingImpl implements CtMethodBinding, Serializable {
 	@Override
 	public void accept(CtVisitor visitor) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

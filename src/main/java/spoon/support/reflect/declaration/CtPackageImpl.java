@@ -17,17 +17,17 @@
 
 package spoon.support.reflect.declaration;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
 import spoon.reflect.binding.CtTypeBinding;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.declaration.CtPackage;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.reference.CtPackageReference;
 import spoon.reflect.visitor.CtVisitor;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * The implementation for {@link spoon.reflect.declaration.CtPackage}.
@@ -40,7 +40,7 @@ public class CtPackageImpl extends CtNamedElementImpl implements CtPackage {
 	private Set<CtPackage> packs = new TreeSet<CtPackage>();
 
 	private Set<CtType<?>> types = new TreeSet<CtType<?>>();
-	
+
 	private ArrayList<CtTypeBinding> bindings = new ArrayList<CtTypeBinding>();
 
 	public CtPackageImpl() {
@@ -86,8 +86,8 @@ public class CtPackageImpl extends CtNamedElementImpl implements CtPackage {
 
 	@Override
 	public String getQualifiedName() {
-		if (getDeclaringPackage() == null || TOP_LEVEL_PACKAGE_NAME.equals(
-				((CtPackageImpl) getDeclaringPackage()).simpleName)) {
+		if (getDeclaringPackage() == null
+				|| TOP_LEVEL_PACKAGE_NAME.equals(((CtPackageImpl) getDeclaringPackage()).simpleName)) {
 			return getSimpleName();
 		}
 		return getDeclaringPackage().getQualifiedName() + "." + getSimpleName();
@@ -147,11 +147,10 @@ public class CtPackageImpl extends CtNamedElementImpl implements CtPackage {
 	@Override
 	public SourcePosition getPosition() {
 		/*
-		 * The super.getPosition() method returns the own position
-		 * or if it's null the position of the parent element,
-		 * but that isn't possible for packages.
-		 * A package should return the position of the package-info file
-		 * if it exists. The parent of a package is another package which
+		 * The super.getPosition() method returns the own position or if it's
+		 * null the position of the parent element, but that isn't possible for
+		 * packages. A package should return the position of the package-info
+		 * file if it exists. The parent of a package is another package which
 		 * needs to have an own package-info file.
 		 */
 		return this.position;

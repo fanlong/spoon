@@ -48,7 +48,7 @@ public interface CtPackage extends CtNamedElement {
 	 * Searches a child package by name.
 	 *
 	 * @param name
-	 * 		the simple name of searched package
+	 *            the simple name of searched package
 	 * @return the found package or null
 	 */
 	CtPackage getPackage(String name);
@@ -63,7 +63,7 @@ public interface CtPackage extends CtNamedElement {
 	 * the package's <i>canonical</i> name.
 	 *
 	 * @return the fully qualified name of this package, or the empty string if
-	 * this is the unnamed package
+	 *         this is the unnamed package
 	 */
 	String getQualifiedName();
 
@@ -100,7 +100,7 @@ public interface CtPackage extends CtNamedElement {
 	 * Sets the children defined in this package
 	 *
 	 * @param pack
-	 * 		new set of child packages
+	 *            new set of child packages
 	 */
 	<T extends CtPackage> T setPackages(Set<CtPackage> pack);
 
@@ -124,20 +124,20 @@ public interface CtPackage extends CtNamedElement {
 	 * Sets the types defined in the package.
 	 *
 	 * @param types
-	 * 		new Set of types
+	 *            new Set of types
 	 */
 	<T extends CtPackage> T setTypes(Set<CtType<?>> types);
-	
+
 	/**
 	 * Get all typebindings in the package
 	 */
 	List<CtTypeBinding> getTypeBindings();
-	
+
 	/**
 	 * Add a type binding to the package
 	 */
 	<T extends CtPackage> T addTypeBinding(CtTypeBinding typeBinding);
-	
+
 	/**
 	 * Remove a type binding to the package
 	 */

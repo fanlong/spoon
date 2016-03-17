@@ -11,18 +11,18 @@ import spoon.reflect.visitor.CtVisitor;
 public class CtFieldBindingImpl implements CtFieldBinding, Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	private transient Factory factory;
-	
+
 	private String name;
-	
+
 	private CtTypeBinding type;
-	
+
 	private CtTypeBinding declaringType;
-	
+
 	@Override
 	public <T extends CtFieldBinding> T setSimpleName(String name) {
 		this.name = name;
@@ -41,12 +41,13 @@ public class CtFieldBindingImpl implements CtFieldBinding, Serializable {
 
 	@Override
 	public CtFieldReference<?> getReference() {
-		CtFieldReference<?> ret = factory.Field().createReference(declaringType.getReference(), type.getReference(), name);
+		CtFieldReference<?> ret = factory.Field().createReference(declaringType.getReference(), type.getReference(),
+				name);
 		return ret;
 	}
 
 	@Override
-	public <T extends CtFieldBinding>  T setType(CtTypeBinding typeBinding) {
+	public <T extends CtFieldBinding> T setType(CtTypeBinding typeBinding) {
 		this.type = typeBinding;
 		return (T) this;
 	}

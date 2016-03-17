@@ -16,19 +16,19 @@ import spoon.reflect.visitor.CtVisitor;
 public class CtTypeBindingImpl implements CtTypeBinding, Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private transient Factory factory;
-	
+
 	private String qualName;
 	private CtPackage pack;
 	private CtTypeBinding supertype;
 	private ArrayList<CtTypeBinding> interfaces = new ArrayList<CtTypeBinding>();
 	private ArrayList<CtFieldBinding> fields = new ArrayList<CtFieldBinding>();
 	private ArrayList<CtMethodBinding> methods = new ArrayList<CtMethodBinding>();
-	
+
 	/**
 	 * Tells if a given Java qualified name is that of an inner type.
 	 */
@@ -43,7 +43,7 @@ public class CtTypeBindingImpl implements CtTypeBinding, Serializable {
 	protected int hasPackage(String qualifiedName) {
 		return qualifiedName.lastIndexOf(CtPackage.PACKAGE_SEPARATOR);
 	}
-	
+
 	@Override
 	public <T extends CtTypeBinding> T setQualifiedName(String qualName) {
 		this.qualName = qualName;
@@ -52,18 +52,18 @@ public class CtTypeBindingImpl implements CtTypeBinding, Serializable {
 
 	@Override
 	public String getFullName() {
-		if (pack == null)
+		if (pack == null) {
 			return "?." + qualName;
-		else {
+		} else {
 			return pack.getQualifiedName() + "." + qualName;
 		}
 	}
-	
+
 	@Override
 	public String getQualifiedName() {
 		return qualName;
 	}
-	
+
 	@Override
 	public String getSimpleName() {
 		if (hasInnerType(qualName) > 0) {

@@ -2,32 +2,30 @@ package spoon.reflect.binding;
 
 import java.util.List;
 
-import spoon.processing.FactoryAccessor;
 import spoon.reflect.declaration.CtPackage;
 import spoon.reflect.reference.CtTypeReference;
-import spoon.reflect.visitor.CtVisitable;
 
-// The binding class contains the meta information for 
+// The binding class contains the meta information for
 // the program to use a type. The difference between CtType
 // and CtTypeBinding is that if the code of the type is not
 // present, you may still get CtTypeBinding but you will not
 // get CtType.
 public interface CtTypeBinding extends CtBinding {
-	
+
 	<T extends CtTypeBinding> T setQualifiedName(String qualName);
-	
+
 	String getQualifiedName();
-	
+
 	String getSimpleName();
-	
+
 	CtPackage getPackage();
-	
+
 	CtTypeBinding getSuperType();
-	
+
 	List<CtTypeBinding> getSuperInterfaces();
-	
+
 	List<CtFieldBinding> getFields();
-	
+
 	List<CtMethodBinding> getMethods();
 
 	<T extends CtTypeBinding> T addField(CtFieldBinding fb);
@@ -41,6 +39,6 @@ public interface CtTypeBinding extends CtBinding {
 	<T extends CtTypeBinding> T addInterface(CtTypeBinding typeBinding);
 
 	CtTypeReference<?> getReference();
-	
+
 	String getFullName();
 }

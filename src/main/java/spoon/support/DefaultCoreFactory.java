@@ -17,10 +17,16 @@
 
 package spoon.support;
 
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Stack;
+
 import spoon.Launcher;
-import spoon.reflect.binding.CtFieldBinding;
-import spoon.reflect.binding.CtMethodBinding;
-import spoon.reflect.binding.CtTypeBinding;
 import spoon.reflect.code.CtAnnotationFieldAccess;
 import spoon.reflect.code.CtArrayRead;
 import spoon.reflect.code.CtArrayWrite;
@@ -164,15 +170,6 @@ import spoon.support.reflect.reference.CtTypeParameterReferenceImpl;
 import spoon.support.reflect.reference.CtTypeReferenceImpl;
 import spoon.support.util.RtHelper;
 
-import java.io.Serializable;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Stack;
-
 /**
  * This class implements a default core factory for Spoon's meta-model. This
  * implementation is done with regular Java classes (POJOs).
@@ -242,7 +239,8 @@ public class DefaultCoreFactory implements CoreFactory, Serializable {
 					if (!Modifier.isFinal(f.getModifiers()) && !Modifier.isStatic(f.getModifiers())) {
 						if (fieldValue instanceof Collection) {
 							Collection<Object> c;
-							if (fieldValue == CtElementImpl.emptyCollection() || fieldValue == CtElementImpl.emptySet()) {
+							if (fieldValue == CtElementImpl.emptyCollection()
+									|| fieldValue == CtElementImpl.emptySet()) {
 								c = (Collection<Object>) fieldValue;
 							} else {
 								c = (Collection<Object>) fieldValue.getClass().getMethod("clone").invoke(fieldValue);
@@ -257,7 +255,8 @@ public class DefaultCoreFactory implements CoreFactory, Serializable {
 							// TODO: ARE THERE REALLY MAP FIELDS IN THE MODEL?
 							// System.err.println(" cloning collection " + f+" :
 							// "+cloningContext.peek().getClass().getSimpleName());
-							Map<Object, Object> m = (Map<Object, Object>) fieldValue.getClass().getMethod("clone").invoke(fieldValue);
+							Map<Object, Object> m = (Map<Object, Object>) fieldValue.getClass().getMethod("clone")
+									.invoke(fieldValue);
 							// m.clear();
 							f.set(result, m);
 							for (Entry<?, ?> e : ((Map<?, ?>) fieldValue).entrySet()) {
@@ -288,7 +287,7 @@ public class DefaultCoreFactory implements CoreFactory, Serializable {
 			}
 		} catch (Exception e) {
 			Launcher.LOGGER.error(e.getMessage(), e);
-			//			cloningContext.pop();
+			// cloningContext.pop();
 		}
 		return result;
 
@@ -696,7 +695,8 @@ public class DefaultCoreFactory implements CoreFactory, Serializable {
 		this.mainFactory = mainFactory;
 	}
 
-	public SourcePosition createSourcePosition(CompilationUnit compilationUnit, int start, int end, int[] lineSeparatorPositions) {
+	public SourcePosition createSourcePosition(CompilationUnit compilationUnit, int start, int end,
+			int[] lineSeparatorPositions) {
 		return new SourcePositionImpl(compilationUnit, start, end, lineSeparatorPositions);
 	}
 

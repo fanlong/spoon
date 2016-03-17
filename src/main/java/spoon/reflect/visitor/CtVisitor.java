@@ -17,6 +17,8 @@
 
 package spoon.reflect.visitor;
 
+import java.lang.annotation.Annotation;
+
 import spoon.reflect.binding.CtFieldBinding;
 import spoon.reflect.binding.CtMethodBinding;
 import spoon.reflect.binding.CtTypeBinding;
@@ -93,8 +95,6 @@ import spoon.reflect.reference.CtParameterReference;
 import spoon.reflect.reference.CtTypeParameterReference;
 import spoon.reflect.reference.CtTypeReference;
 import spoon.reflect.reference.CtUnboundVariableReference;
-
-import java.lang.annotation.Annotation;
 
 /**
  * This interface defines the visitor for the Spoon metamodel, as defined in
@@ -326,8 +326,7 @@ public interface CtVisitor {
 	/**
 	 * Visits an operator assignment.
 	 */
-	<T, A extends T> void visitCtOperatorAssignment(
-			CtOperatorAssignment<T, A> assignment);
+	<T, A extends T> void visitCtOperatorAssignment(CtOperatorAssignment<T, A> assignment);
 
 	/**
 	 * Visits a package declaration.
@@ -457,11 +456,13 @@ public interface CtVisitor {
 	<T> void visitCtFieldWrite(CtFieldWrite<T> fieldWrite);
 
 	<T> void visitCtSuperAccess(CtSuperAccess<T> f);
-	
+
 	/**
 	 * Visits a binding
 	 */
 	void visitCtTypeBinding(CtTypeBinding b);
+
 	void visitCtMethodBinding(CtMethodBinding b);
+
 	void visitCtFieldBinding(CtFieldBinding b);
 }

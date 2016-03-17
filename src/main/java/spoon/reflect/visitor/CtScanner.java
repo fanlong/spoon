@@ -17,6 +17,11 @@
 
 package spoon.reflect.visitor;
 
+import java.lang.annotation.Annotation;
+import java.util.Collection;
+import java.util.IdentityHashMap;
+import java.util.List;
+
 import spoon.reflect.binding.CtBinding;
 import spoon.reflect.binding.CtFieldBinding;
 import spoon.reflect.binding.CtMethodBinding;
@@ -83,13 +88,13 @@ import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtPackage;
 import spoon.reflect.declaration.CtParameter;
 import spoon.reflect.declaration.CtTypeParameter;
+import spoon.reflect.internal.CtCircularTypeReference;
 import spoon.reflect.internal.CtImplicitArrayTypeReference;
+import spoon.reflect.internal.CtImplicitTypeReference;
 import spoon.reflect.reference.CtArrayTypeReference;
 import spoon.reflect.reference.CtCatchVariableReference;
-import spoon.reflect.internal.CtCircularTypeReference;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtFieldReference;
-import spoon.reflect.internal.CtImplicitTypeReference;
 import spoon.reflect.reference.CtLocalVariableReference;
 import spoon.reflect.reference.CtPackageReference;
 import spoon.reflect.reference.CtParameterReference;
@@ -97,11 +102,6 @@ import spoon.reflect.reference.CtReference;
 import spoon.reflect.reference.CtTypeParameterReference;
 import spoon.reflect.reference.CtTypeReference;
 import spoon.reflect.reference.CtUnboundVariableReference;
-
-import java.lang.annotation.Annotation;
-import java.util.Collection;
-import java.util.IdentityHashMap;
-import java.util.List;
 
 /**
  * This visitor implements a deep-search scan on the metamodel.
@@ -141,13 +141,13 @@ public abstract class CtScanner implements CtVisitor {
 	 */
 	protected void exitReference(CtReference e) {
 	}
-	
+
 	protected void enterBinding(CtBinding b) {
 	}
-	
+
 	protected void exitBinding(CtBinding b) {
 	}
-	
+
 	protected void revisitBinding(CtBinding b) {
 	}
 
@@ -194,8 +194,7 @@ public abstract class CtScanner implements CtVisitor {
 
 	}
 
-	public <A extends Annotation> void visitCtAnnotation(
-			CtAnnotation<A> annotation) {
+	public <A extends Annotation> void visitCtAnnotation(CtAnnotation<A> annotation) {
 		enter(annotation);
 		scan(annotation.getAnnotationType());
 		scan(annotation.getAnnotations());
@@ -223,8 +222,7 @@ public abstract class CtScanner implements CtVisitor {
 		}
 	}
 
-	public <A extends Annotation> void visitCtAnnotationType(
-			CtAnnotationType<A> annotationType) {
+	public <A extends Annotation> void visitCtAnnotationType(CtAnnotationType<A> annotationType) {
 		enter(annotationType);
 		scan(annotationType.getAnnotations());
 		scan(annotationType.getNestedTypes());
@@ -239,8 +237,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(anonymousExec);
 	}
 
-	public <T, E extends CtExpression<?>> void visitCtArrayAccess(
-			CtArrayAccess<T, E> arrayAccess) {
+	public <T, E extends CtExpression<?>> void visitCtArrayAccess(CtArrayAccess<T, E> arrayAccess) {
 		enter(arrayAccess);
 		scan(arrayAccess.getAnnotations());
 		scan(arrayAccess.getType());
@@ -282,8 +279,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(asserted);
 	}
 
-	public <T, A extends T> void visitCtAssignment(
-			CtAssignment<T, A> assignement) {
+	public <T, A extends T> void visitCtAssignment(CtAssignment<T, A> assignement) {
 		enter(assignement);
 		scan(assignement.getAnnotations());
 		scan(assignement.getType());
@@ -390,8 +386,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(ctEnum);
 	}
 
-	public <T> void visitCtExecutableReference(
-			CtExecutableReference<T> reference) {
+	public <T> void visitCtExecutableReference(CtExecutableReference<T> reference) {
 		enterReference(reference);
 		scan(reference.getDeclaringType());
 		scan(reference.getType());
@@ -416,8 +411,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(thisAccess);
 	}
 
-	public <T> void visitCtAnnotationFieldAccess(
-			CtAnnotationFieldAccess<T> annotationFieldAccess) {
+	public <T> void visitCtAnnotationFieldAccess(CtAnnotationFieldAccess<T> annotationFieldAccess) {
 		enter(annotationFieldAccess);
 		scan(annotationFieldAccess.getAnnotations());
 		scan(annotationFieldAccess.getType());
@@ -501,8 +495,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(localVariable);
 	}
 
-	public <T> void visitCtLocalVariableReference(
-			CtLocalVariableReference<T> reference) {
+	public <T> void visitCtLocalVariableReference(CtLocalVariableReference<T> reference) {
 		enterReference(reference);
 		scan(reference.getType());
 		exitReference(reference);
@@ -589,8 +582,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(expression);
 	}
 
-	public <T, A extends T> void visitCtOperatorAssignment(
-			CtOperatorAssignment<T, A> assignment) {
+	public <T, A extends T> void visitCtOperatorAssignment(CtOperatorAssignment<T, A> assignment) {
 		enter(assignment);
 		scan(assignment.getAnnotations());
 		scan(assignment.getType());
@@ -605,8 +597,9 @@ public abstract class CtScanner implements CtVisitor {
 		scan(ctPackage.getAnnotations());
 		scan(ctPackage.getPackages());
 		scan(ctPackage.getTypes());
-		if (bindingRec != null)
+		if (bindingRec != null) {
 			scanBinding(ctPackage.getTypeBindings());
+		}
 		exit(ctPackage);
 	}
 
@@ -763,15 +756,13 @@ public abstract class CtScanner implements CtVisitor {
 		exit(whileLoop);
 	}
 
-	public <T> void visitCtCodeSnippetExpression(
-			CtCodeSnippetExpression<T> expression) {
+	public <T> void visitCtCodeSnippetExpression(CtCodeSnippetExpression<T> expression) {
 	}
 
 	public void visitCtCodeSnippetStatement(CtCodeSnippetStatement statement) {
 	}
 
-	public <T> void visitCtUnboundVariableReference(
-			CtUnboundVariableReference<T> reference) {
+	public <T> void visitCtUnboundVariableReference(CtUnboundVariableReference<T> reference) {
 
 	}
 
@@ -805,13 +796,13 @@ public abstract class CtScanner implements CtVisitor {
 		scan(f.getTarget());
 		exit(f);
 	}
-	
+
 	IdentityHashMap<CtBinding, Integer> bindingRec = null;
-	
+
 	public void initializeBindingVisit() {
 		bindingRec = new IdentityHashMap<CtBinding, Integer>();
 	}
-	
+
 	@Override
 	public void visitCtTypeBinding(CtTypeBinding b) {
 		if (bindingRec.containsKey(b)) {
@@ -825,16 +816,19 @@ public abstract class CtScanner implements CtVisitor {
 		exitBinding(b);
 		bindingRec.put(b, 1);
 	}
-	
+
 	public <T extends CtBinding> void scanBinding(List<T> bindings) {
-		if (bindings != null)
-			for (CtBinding b : bindings)
+		if (bindings != null) {
+			for (CtBinding b : bindings) {
 				scanBinding(b);
+			}
+		}
 	}
-	
+
 	public <T extends CtBinding> void scanBinding(T b) {
-		if (b != null)
+		if (b != null) {
 			b.accept(this);
+		}
 	}
 
 	@Override
@@ -849,7 +843,7 @@ public abstract class CtScanner implements CtVisitor {
 		exitBinding(b);
 		bindingRec.put(b, 1);
 	}
-	
+
 	@Override
 	public void visitCtMethodBinding(CtMethodBinding b) {
 		if (bindingRec.containsKey(b)) {

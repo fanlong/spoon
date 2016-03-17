@@ -17,6 +17,11 @@
 
 package spoon.reflect.factory;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
 import spoon.compiler.Environment;
 import spoon.reflect.cu.CompilationUnit;
 import spoon.reflect.declaration.CtAnnotationType;
@@ -32,11 +37,6 @@ import spoon.reflect.declaration.CtType;
 import spoon.support.DefaultCoreFactory;
 import spoon.support.DefaultInternalFactory;
 import spoon.support.StandardEnvironment;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * Implements {@link Factory}
@@ -275,7 +275,8 @@ public class FactoryImpl implements Factory, Serializable {
 	}
 
 	/**
-	 * Should not be called directly. Use {@link spoon.Launcher#createFactory()} instead.
+	 * Should not be called directly. Use {@link spoon.Launcher#createFactory()}
+	 * instead.
 	 */
 	public FactoryImpl(CoreFactory coreFactory, Environment environment) {
 		this(coreFactory, environment, null);
@@ -292,8 +293,8 @@ public class FactoryImpl implements Factory, Serializable {
 
 	/**
 	 * Note this is an instance field. To avoid memory leaks and dedup being
-	 * targeted to each Spoon Launching, that could differ a lot by
-	 * frequently used symbols.
+	 * targeted to each Spoon Launching, that could differ a lot by frequently
+	 * used symbols.
 	 */
 	private transient ThreadLocal<Dedup> threadLocalDedup = new ThreadLocal<Dedup>() {
 		@Override
@@ -323,11 +324,12 @@ public class FactoryImpl implements Factory, Serializable {
 	}
 
 	private transient BindingFactory bindings;
-	
+
 	@Override
 	public BindingFactory Binding() {
-		if (bindings == null)
+		if (bindings == null) {
 			bindings = new BindingFactory(this);
+		}
 		return bindings;
 	}
 }
