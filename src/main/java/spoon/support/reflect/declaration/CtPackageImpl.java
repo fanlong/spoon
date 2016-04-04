@@ -177,4 +177,14 @@ public class CtPackageImpl extends CtNamedElementImpl implements CtPackage {
 		return bindings;
 	}
 
+	@Override
+	public CtTypeBinding getTypeBinding(String simpleName) {
+		for (CtTypeBinding tbind : bindings) {
+			if (tbind.getSimpleName().equals(simpleName)) {
+				return tbind;
+			}
+		}
+		return null;
+	}
+
 }

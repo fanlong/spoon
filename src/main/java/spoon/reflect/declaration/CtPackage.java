@@ -134,6 +134,11 @@ public interface CtPackage extends CtNamedElement {
 	List<CtTypeBinding> getTypeBindings();
 
 	/**
+	 * Get the typebinding in the package
+	 */
+	CtTypeBinding getTypeBinding(String simpleName);
+
+	/**
 	 * Add a type binding to the package
 	 */
 	<T extends CtPackage> T addTypeBinding(CtTypeBinding typeBinding);
