@@ -1046,7 +1046,7 @@ public class JDTTreeBuilder extends ASTVisitor {
 	CtType<?> createType(TypeDeclaration typeDeclaration) {
 		CtType<?> type = null;
 		if ((typeDeclaration.modifiers & ClassFileConstants.AccAnnotation) != 0) {
-			type = factory.Core().<java.lang.annotation.Annotation> createAnnotationType();
+			type = factory.Core().<java.lang.annotation.Annotation>createAnnotationType();
 		} else if ((typeDeclaration.modifiers & ClassFileConstants.AccEnum) != 0) {
 			CtEnum<?> e = factory.Core().createEnum();
 			if (typeDeclaration.superInterfaces != null) {
