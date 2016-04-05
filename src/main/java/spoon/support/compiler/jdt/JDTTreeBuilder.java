@@ -479,7 +479,7 @@ public class JDTTreeBuilder extends ASTVisitor {
 			}
 			CtFieldBinding ret = factory.Binding().createFieldBinding();
 			fieldBindingCache.put(binding, ret);
-			ret.setSimpleName(new String(binding.shortReadableName()));
+			ret.setSimpleName(new String(binding.name));
 			ret.setType(getTypeBinding(binding.type));
 			ret.setDeclaringType(getTypeBinding(binding.declaringClass));
 			return ret;
@@ -491,7 +491,7 @@ public class JDTTreeBuilder extends ASTVisitor {
 			}
 			CtMethodBinding ret = factory.Binding().createMethodBinding();
 			methodBindingCache.put(binding, ret);
-			ret.setSimpleName(new String(binding.shortReadableName()));
+			ret.setSimpleName(new String(binding.selector));
 			ret.setReturnType(getTypeBinding(binding.returnType));
 			ret.setDeclaringType(getTypeBinding(binding.declaringClass));
 			for (TypeBinding b : binding.parameters) {
@@ -1046,7 +1046,7 @@ public class JDTTreeBuilder extends ASTVisitor {
 	CtType<?> createType(TypeDeclaration typeDeclaration) {
 		CtType<?> type = null;
 		if ((typeDeclaration.modifiers & ClassFileConstants.AccAnnotation) != 0) {
-			type = factory.Core().<java.lang.annotation.Annotation>createAnnotationType();
+			type = factory.Core().<java.lang.annotation.Annotation> createAnnotationType();
 		} else if ((typeDeclaration.modifiers & ClassFileConstants.AccEnum) != 0) {
 			CtEnum<?> e = factory.Core().createEnum();
 			if (typeDeclaration.superInterfaces != null) {
