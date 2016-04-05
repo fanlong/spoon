@@ -102,7 +102,7 @@ public class CtTypeBindingImpl implements CtTypeBinding, Serializable {
 
 	@Override
 	public CtTypeReference<?> getReference() {
-		return factory.Type().createReference(qualName);
+		return factory.Type().createReference(getFullName());
 	}
 
 	@Override
