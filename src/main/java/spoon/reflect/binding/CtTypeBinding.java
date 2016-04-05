@@ -41,4 +41,6 @@ public interface CtTypeBinding extends CtBinding {
 	CtTypeReference<?> getReference();
 
 	String getFullName();
+
+	boolean isPrimitive();
 }

@@ -52,6 +52,9 @@ public class CtTypeBindingImpl implements CtTypeBinding, Serializable {
 
 	@Override
 	public String getFullName() {
+		if (isPrimitive()) {
+			return qualName;
+		}
 		if (pack == null) {
 			return "?." + qualName;
 		} else {
@@ -62,6 +65,12 @@ public class CtTypeBindingImpl implements CtTypeBinding, Serializable {
 	@Override
 	public String getQualifiedName() {
 		return qualName;
+	}
+
+	@Override
+	public boolean isPrimitive() {
+		return ("boolean".equals(getSimpleName()) || "byte".equals(getSimpleName()) || "double".equals(getSimpleName()) || "int".equals(getSimpleName()) || "short".equals(getSimpleName())
+				|| "char".equals(getSimpleName()) || "long".equals(getSimpleName()) || "float".equals(getSimpleName()) || "void".equals(getSimpleName()));
 	}
 
 	@Override
