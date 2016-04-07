@@ -114,8 +114,7 @@ public class CtMethodBindingImpl implements CtMethodBinding, Serializable {
 
 	@Override
 	public void accept(CtVisitor visitor) {
-		// TODO Auto-generated method stub
-
+		visitor.visitCtMethodBinding(this);
 	}
 
 }
