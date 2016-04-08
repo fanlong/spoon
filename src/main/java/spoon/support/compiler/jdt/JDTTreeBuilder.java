@@ -541,6 +541,17 @@ public class JDTTreeBuilder extends ASTVisitor {
 				for (ReferenceBinding rb : rbinding.superInterfaces()) {
 					ret.addInterface(getTypeBinding(rb));
 				}
+			} else if (binding instanceof ArrayBinding) {
+				// For array type, we still need to find its package, this is important
+				ArrayBinding abinding = (ArrayBinding) binding;
+				if (abinding.leafComponentType instanceof ReferenceBinding) {
+					ReferenceBinding rbinding = (ReferenceBinding) abinding.leafComponentType;
+					if (rbinding.fPackage != null) {
+						CtPackage p = factory.Package().getOrCreate(new String(rbinding.fPackage.readableName()));
+						p.addTypeBinding(ret);
+						ret.setPackage(p);
+					}
+				}
 			}
 
 			return ret;
