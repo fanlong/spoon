@@ -279,12 +279,16 @@ public class CtTypeReferenceImpl<T> extends CtReferenceImpl implements CtTypeRef
 						return true;
 					}
 				}
-				CtTypeReference<?> superType = getFactory().Type().createReference(actualSubType.getSuperclass());
-				if (superType.equals(type)) {
-					return true;
-				} else {
-					return superType.isSubtypeOf(type);
+				Class<?> actualSubTypeSup = actualSubType.getSuperclass();
+				if (actualSubTypeSup != null) {
+					CtTypeReference<?> superType = getFactory().Type().createReference(actualSubTypeSup);
+					if (superType.equals(type)) {
+						return true;
+					} else {
+						return superType.isSubtypeOf(type);
+					}
 				}
+				return false; 
 			} catch (Exception e) {
 				Launcher.LOGGER.error("cannot determine runtime types for '" + this + "' and '" + type + "'", e);
 				return false;
