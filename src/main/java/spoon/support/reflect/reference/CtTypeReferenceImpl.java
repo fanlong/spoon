@@ -288,7 +288,7 @@ public class CtTypeReferenceImpl<T> extends CtReferenceImpl implements CtTypeRef
 						return superType.isSubtypeOf(type);
 					}
 				}
-				return false; 
+				return false;
 			} catch (Exception e) {
 				Launcher.LOGGER.error("cannot determine runtime types for '" + this + "' and '" + type + "'", e);
 				return false;
