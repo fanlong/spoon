@@ -23,6 +23,8 @@ public class CtFieldBindingImpl implements CtFieldBinding, Serializable {
 
 	private CtTypeBinding declaringType;
 
+	private boolean isStat;
+
 	@Override
 	public <T extends CtFieldBinding> T setSimpleName(String name) {
 		this.name = name;
@@ -67,6 +69,7 @@ public class CtFieldBindingImpl implements CtFieldBinding, Serializable {
 		return declaringType;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends CtFieldBinding> T setDeclaringType(CtTypeBinding typeBinding) {
 		this.declaringType = typeBinding;
@@ -76,6 +79,18 @@ public class CtFieldBindingImpl implements CtFieldBinding, Serializable {
 	@Override
 	public void accept(CtVisitor visitor) {
 		visitor.visitCtFieldBinding(this);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends CtFieldBinding> T setStatic(boolean isstatic) {
+		isStat = isstatic;
+		return (T) this;
+	}
+
+	@Override
+	public boolean isStatic() {
+		return isStat;
 	}
 
 }

@@ -482,6 +482,7 @@ public class JDTTreeBuilder extends ASTVisitor {
 			ret.setSimpleName(new String(binding.name));
 			ret.setType(getTypeBinding(binding.type));
 			ret.setDeclaringType(getTypeBinding(binding.declaringClass));
+			ret.setStatic((binding.modifiers & ClassFileConstants.AccStatic) != 0);
 			return ret;
 		}
 
@@ -494,6 +495,7 @@ public class JDTTreeBuilder extends ASTVisitor {
 			ret.setSimpleName(new String(binding.selector));
 			ret.setReturnType(getTypeBinding(binding.returnType));
 			ret.setDeclaringType(getTypeBinding(binding.declaringClass));
+			ret.setStatic(binding.isStatic());
 			for (TypeBinding b : binding.parameters) {
 				ret.addParameter(getTypeBinding(b));
 			}

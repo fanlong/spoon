@@ -14,5 +14,9 @@ public interface CtFieldBinding extends CtBinding {
 
 	<T extends CtFieldBinding> T setType(CtTypeBinding typeBinding);
 
+	<T extends CtFieldBinding> T setStatic(boolean isstatic);
+
+	boolean isStatic();
+
 	CtFieldReference<?> getReference();
 }
