@@ -42,6 +42,30 @@ public class CtLocalVariableReferenceImpl<T> extends CtVariableReferenceImpl<T>
 	}
 
 	@Override
+	public int hashCode() {
+		if (declaration != null) {
+			return declaration.hashCode();
+		} else {
+			return super.hashCode();
+		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof CtLocalVariableReferenceImpl)) {
+			return false;
+		}
+		CtLocalVariableReferenceImpl<?> a = (CtLocalVariableReferenceImpl<?>) o;
+		if (declaration == null && a.declaration == null) {
+			return true;
+		}
+		if (declaration == null || a.declaration == null) {
+			return false;
+		}
+		return declaration.equals(a.declaration);
+	}
+
+	@Override
 	public <C extends CtLocalVariableReference<T>> C setDeclaration(CtLocalVariable<T> declaration) {
 		this.declaration = declaration;
 		return (C) this;

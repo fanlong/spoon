@@ -63,6 +63,20 @@ public class CtParameterReferenceImpl<T> extends CtVariableReferenceImpl<T>
 	}
 
 	@Override
+	public int hashCode() {
+		return super.hashCode() ^ executable.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (executable == null || !(o instanceof CtParameterReferenceImpl)) {
+			return super.equals(o);
+		} else {
+			return super.equals(o) && executable.equals(((CtParameterReferenceImpl<?>) o).executable);
+		}
+	}
+
+	@Override
 	public <C extends CtParameterReference<T>> C setDeclaringExecutable(CtExecutableReference<?> executable) {
 		this.executable = executable;
 		return (C) this;
