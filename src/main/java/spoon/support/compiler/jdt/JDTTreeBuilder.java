@@ -2057,14 +2057,14 @@ public class JDTTreeBuilder extends ASTVisitor {
 
 	@Override
 	public boolean visit(ClassLiteralAccess classLiteral, BlockScope scope) {
-		CtTypeReference<Class<Object>> ref = references.getTypeReference(classLiteral.targetType);
-		CtFieldReference<Class<Object>> fr = factory.Core().createFieldReference();
+		CtTypeReference<Object> ref = references.getTypeReference(classLiteral.targetType);
+		CtFieldReference<Object> fr = factory.Core().createFieldReference();
 		fr.setSimpleName("class");
-		fr.setType(ref);
+		fr.setType(factory.Type().createReference("java.lang.Class"));
 		fr.setDeclaringType(ref);
 
-		CtFieldRead<Class<Object>> fa = factory.Core().createFieldRead();
-		fa.setType(ref);
+		CtFieldRead<Object> fa = factory.Core().createFieldRead();
+		fa.setType(factory.Type().createReference("java.lang.Class"));
 		fa.setVariable(fr);
 
 		context.enter(fa, classLiteral);

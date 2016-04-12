@@ -181,4 +181,16 @@ public class FieldAccessTest {
 		assertEquals("next", fieldInAnonymous.getVariable().getSimpleName());
 		assertEquals("ingredient.next", fieldInAnonymous.toString());
 	}
+
+	@Test
+	public void testClassFieldAccess() throws Exception {
+		final Factory factory = TestUtils.build(ClassField.class);
+		final CtType<ClassField> classf = factory.Type().get(ClassField.class);
+		final CtFieldRead<?> fieldClass = (CtFieldRead<?>) classf.getElements(new TypeFilter<>(CtFieldRead.class)).get(0);
+
+		assertNotNull(fieldClass);
+		assertNotNull(fieldClass.getVariable());
+		assertNotNull(fieldClass.getVariable().getType());
+		assertEquals("java.lang.Class", fieldClass.getVariable().getType().toString());
+	}
 }
