@@ -62,7 +62,7 @@ public class CtLocalVariableReferenceImpl<T> extends CtVariableReferenceImpl<T>
 		if (declaration == null || a.declaration == null) {
 			return false;
 		}
-		return declaration.equals(a.declaration);
+		return declaration == a.declaration;
 	}
 
 	@Override
