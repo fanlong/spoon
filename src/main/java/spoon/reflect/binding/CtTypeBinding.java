@@ -16,6 +16,7 @@ public interface CtTypeBinding extends CtBinding {
 
 	String getQualifiedName();
 
+	@Override
 	String getSimpleName();
 
 	CtPackage getPackage();
@@ -28,6 +29,8 @@ public interface CtTypeBinding extends CtBinding {
 
 	List<CtMethodBinding> getMethods();
 
+	List<CtTypeBinding> getInnerTypes();
+
 	<T extends CtTypeBinding> T addField(CtFieldBinding fb);
 
 	<T extends CtTypeBinding> T addMethod(CtMethodBinding methodBinding);
@@ -38,6 +41,9 @@ public interface CtTypeBinding extends CtBinding {
 
 	<T extends CtTypeBinding> T addInterface(CtTypeBinding typeBinding);
 
+	<T extends CtTypeBinding> T addInnerType(CtTypeBinding typeBinding);
+
+	@Override
 	CtTypeReference<?> getReference();
 
 	String getFullName();

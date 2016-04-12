@@ -28,6 +28,7 @@ public class CtTypeBindingImpl implements CtTypeBinding, Serializable {
 	private ArrayList<CtTypeBinding> interfaces = new ArrayList<CtTypeBinding>();
 	private ArrayList<CtFieldBinding> fields = new ArrayList<CtFieldBinding>();
 	private ArrayList<CtMethodBinding> methods = new ArrayList<CtMethodBinding>();
+	private ArrayList<CtTypeBinding> innertypes = new ArrayList<CtTypeBinding>();
 
 	/**
 	 * Tells if a given Java qualified name is that of an inner type.
@@ -157,6 +158,18 @@ public class CtTypeBindingImpl implements CtTypeBinding, Serializable {
 	@Override
 	public void accept(CtVisitor visitor) {
 		visitor.visitCtTypeBinding(this);
+	}
+
+	@Override
+	public List<CtTypeBinding> getInnerTypes() {
+		return innertypes;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends CtTypeBinding> T addInnerType(CtTypeBinding typeBinding) {
+		innertypes.add(typeBinding);
+		return (T) this;
 	}
 
 }

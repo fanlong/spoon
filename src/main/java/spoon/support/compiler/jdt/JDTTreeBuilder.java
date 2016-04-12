@@ -530,6 +530,10 @@ public class JDTTreeBuilder extends ASTVisitor {
 				for (MethodBinding b : rbinding.methods()) {
 					ret.addMethod(getMethodBinding(b));
 				}
+				for (TypeBinding b : rbinding.memberTypes()) {
+					ret.addInnerType(getTypeBinding(b));
+				}
+
 				if (rbinding.fPackage != null) {
 					CtPackage p = factory.Package().getOrCreate(new String(rbinding.fPackage.readableName()));
 					p.addTypeBinding(ret);
