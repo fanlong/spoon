@@ -29,6 +29,8 @@ public class CtMethodBindingImpl implements CtMethodBinding, Serializable {
 	private ArrayList<CtTypeBinding> parameters = new ArrayList<CtTypeBinding>();
 
 	private boolean isstatic;
+	private boolean ispublic;
+	private boolean isprivate;
 
 	@Override
 	public <T extends CtMethodBinding> T setSimpleName(String name) {
@@ -115,6 +117,28 @@ public class CtMethodBindingImpl implements CtMethodBinding, Serializable {
 	@Override
 	public void accept(CtVisitor visitor) {
 		visitor.visitCtMethodBinding(this);
+	}
+
+	@Override
+	public boolean isPublic() {
+		return ispublic;
+	}
+
+	@Override
+	public boolean isPrivate() {
+		return isprivate;
+	}
+
+	@Override
+	public <T extends CtMethodBinding> T setPublic(boolean ispublic) {
+		this.ispublic = ispublic;
+		return (T) this;
+	}
+
+	@Override
+	public <T extends CtMethodBinding> T setPrivate(boolean isprivate) {
+		this.isprivate = isprivate;
+		return (T) this;
 	}
 
 }

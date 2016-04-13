@@ -53,7 +53,7 @@ public class CtTypeBindingImpl implements CtTypeBinding, Serializable {
 
 	@Override
 	public String getFullName() {
-		if (isPrimitive()) {
+		if (isPrimitive() || isPrimitiveArray()) {
 			return qualName;
 		}
 		if (pack == null) {
@@ -72,6 +72,20 @@ public class CtTypeBindingImpl implements CtTypeBinding, Serializable {
 	public boolean isPrimitive() {
 		return ("boolean".equals(getSimpleName()) || "byte".equals(getSimpleName()) || "double".equals(getSimpleName()) || "int".equals(getSimpleName()) || "short".equals(getSimpleName())
 				|| "char".equals(getSimpleName()) || "long".equals(getSimpleName()) || "float".equals(getSimpleName()) || "void".equals(getSimpleName()));
+	}
+
+	@Override
+	public boolean isArray() {
+		return getSimpleName().endsWith("[]");
+	}
+
+	@Override
+	public boolean isPrimitiveArray() {
+		String a = getSimpleName();
+		while (a.endsWith("[]"))
+			a = a.substring(0, a.length() - 2);
+		return ("boolean".equals(a) || "byte".equals(a) || "double".equals(a) || "int".equals(a) || "short".equals(a)
+				|| "char".equals(a) || "long".equals(a) || "float".equals(a) || "void".equals(a));
 	}
 
 	@Override

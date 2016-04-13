@@ -483,6 +483,8 @@ public class JDTTreeBuilder extends ASTVisitor {
 			ret.setType(getTypeBinding(binding.type));
 			ret.setDeclaringType(getTypeBinding(binding.declaringClass));
 			ret.setStatic((binding.modifiers & ClassFileConstants.AccStatic) != 0);
+			ret.setPrivate(binding.isPrivate());
+			ret.setPublic(binding.isPublic());
 			return ret;
 		}
 
@@ -496,6 +498,8 @@ public class JDTTreeBuilder extends ASTVisitor {
 			ret.setReturnType(getTypeBinding(binding.returnType));
 			ret.setDeclaringType(getTypeBinding(binding.declaringClass));
 			ret.setStatic(binding.isStatic());
+			ret.setPrivate(binding.isPrivate());
+			ret.setPublic(binding.isPublic());
 			for (TypeBinding b : binding.parameters) {
 				ret.addParameter(getTypeBinding(b));
 			}
@@ -536,7 +540,9 @@ public class JDTTreeBuilder extends ASTVisitor {
 
 				if (rbinding.fPackage != null) {
 					CtPackage p = factory.Package().getOrCreate(new String(rbinding.fPackage.readableName()));
-					p.addTypeBinding(ret);
+					if (rbinding.enclosingType() == null) {
+						p.addTypeBinding(ret);
+					}
 					ret.setPackage(p);
 				}
 

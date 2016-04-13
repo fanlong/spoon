@@ -22,6 +22,8 @@ import java.util.Stack;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import spoon.reflect.binding.CtBinding;
+import spoon.reflect.binding.CtFieldBinding;
+import spoon.reflect.binding.CtMethodBinding;
 import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtNamedElement;
 import spoon.reflect.reference.CtReference;
@@ -29,6 +31,27 @@ import spoon.reflect.visitor.CtScanner;
 
 public class SpoonTreeBuilder extends CtScanner {
 	Stack<DefaultMutableTreeNode> nodes;
+
+	private static String getBindingPrefix(CtBinding b) {
+		String prefix = "";
+		if (b instanceof CtFieldBinding) {
+			if (((CtFieldBinding) b).isPublic())
+				prefix += "public ";
+			if (((CtFieldBinding) b).isPrivate())
+				prefix += "private ";
+			if (((CtFieldBinding) b).isStatic())
+				prefix += "static ";
+		}
+		if (b instanceof CtMethodBinding) {
+			if (((CtMethodBinding) b).isPublic())
+				prefix += "public ";
+			if (((CtMethodBinding) b).isPrivate())
+				prefix += "private ";
+			if (((CtMethodBinding) b).isStatic())
+				prefix += "static ";
+		}
+		return prefix;
+	}
 
 	DefaultMutableTreeNode root;
 
@@ -54,7 +77,8 @@ public class SpoonTreeBuilder extends CtScanner {
 				if (getUserObject() instanceof CtNamedElement) {
 					return getASTNodeName() + " - " + ((CtNamedElement) getUserObject()).getSimpleName();
 				} else if (getUserObject() instanceof CtBinding) {
-					return getASTNodeName() + " - " + ((CtBinding) getUserObject()).getSimpleName();
+					String prefix = getBindingPrefix((CtBinding) getUserObject());
+					return getASTNodeName() + " - " + prefix + ((CtBinding) getUserObject()).getSimpleName();
 				}
 				return getASTNodeName() + " - " + getUserObject().toString();
 			}
@@ -95,11 +119,8 @@ public class SpoonTreeBuilder extends CtScanner {
 
 	@Override
 	public void revisitBinding(CtBinding b) {
-		if (!b.getSimpleName().contains("?")) {
-			createNode(b.getReference());
-		} else {
-			createNode(b.getSimpleName());
-		}
+		String prefix = getBindingPrefix(b);
+		createNode(prefix + " " + b.getSimpleName());
 		super.revisitBinding(b);
 		nodes.pop();
 	}

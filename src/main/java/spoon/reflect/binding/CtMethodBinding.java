@@ -26,5 +26,14 @@ public interface CtMethodBinding extends CtBinding {
 
 	boolean isStatic();
 
+	boolean isPublic();
+
+	boolean isPrivate();
+
+	<T extends CtMethodBinding> T setPublic(boolean ispublic);
+
+	<T extends CtMethodBinding> T setPrivate(boolean isprivate);
+
+	@Override
 	CtExecutableReference<?> getReference();
 }

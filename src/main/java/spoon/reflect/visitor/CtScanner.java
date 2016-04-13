@@ -60,7 +60,6 @@ import spoon.reflect.code.CtNewArray;
 import spoon.reflect.code.CtNewClass;
 import spoon.reflect.code.CtOperatorAssignment;
 import spoon.reflect.code.CtReturn;
-import spoon.reflect.code.CtStatement;
 import spoon.reflect.code.CtStatementList;
 import spoon.reflect.code.CtSuperAccess;
 import spoon.reflect.code.CtSwitch;
@@ -194,6 +193,7 @@ public abstract class CtScanner implements CtVisitor {
 
 	}
 
+	@Override
 	public <A extends Annotation> void visitCtAnnotation(CtAnnotation<A> annotation) {
 		enter(annotation);
 		scan(annotation.getAnnotationType());
@@ -222,6 +222,7 @@ public abstract class CtScanner implements CtVisitor {
 		}
 	}
 
+	@Override
 	public <A extends Annotation> void visitCtAnnotationType(CtAnnotationType<A> annotationType) {
 		enter(annotationType);
 		scan(annotationType.getAnnotations());
@@ -230,6 +231,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(annotationType);
 	}
 
+	@Override
 	public void visitCtAnonymousExecutable(CtAnonymousExecutable anonymousExec) {
 		enter(anonymousExec);
 		scan(anonymousExec.getAnnotations());
@@ -237,6 +239,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(anonymousExec);
 	}
 
+	@Override
 	public <T, E extends CtExpression<?>> void visitCtArrayAccess(CtArrayAccess<T, E> arrayAccess) {
 		enter(arrayAccess);
 		scan(arrayAccess.getAnnotations());
@@ -257,6 +260,7 @@ public abstract class CtScanner implements CtVisitor {
 		visitCtArrayAccess(arrayWrite);
 	}
 
+	@Override
 	public <T> void visitCtArrayTypeReference(CtArrayTypeReference<T> reference) {
 		enterReference(reference);
 		scan(reference.getDeclaringType());
@@ -271,6 +275,7 @@ public abstract class CtScanner implements CtVisitor {
 		visitCtArrayTypeReference(reference);
 	}
 
+	@Override
 	public <T> void visitCtAssert(CtAssert<T> asserted) {
 		enter(asserted);
 		scan(asserted.getAnnotations());
@@ -279,6 +284,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(asserted);
 	}
 
+	@Override
 	public <T, A extends T> void visitCtAssignment(CtAssignment<T, A> assignement) {
 		enter(assignement);
 		scan(assignement.getAnnotations());
@@ -289,6 +295,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(assignement);
 	}
 
+	@Override
 	public <T> void visitCtBinaryOperator(CtBinaryOperator<T> operator) {
 		enter(operator);
 		scan(operator.getAnnotations());
@@ -299,6 +306,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(operator);
 	}
 
+	@Override
 	public <R> void visitCtBlock(CtBlock<R> block) {
 		enter(block);
 		scan(block.getAnnotations());
@@ -306,12 +314,14 @@ public abstract class CtScanner implements CtVisitor {
 		exit(block);
 	}
 
+	@Override
 	public void visitCtBreak(CtBreak breakStatement) {
 		enter(breakStatement);
 		scan(breakStatement.getAnnotations());
 		exit(breakStatement);
 	}
 
+	@Override
 	public <S> void visitCtCase(CtCase<S> caseStatement) {
 		enter(caseStatement);
 		scan(caseStatement.getAnnotations());
@@ -320,6 +330,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(caseStatement);
 	}
 
+	@Override
 	public void visitCtCatch(CtCatch catchBlock) {
 		enter(catchBlock);
 		scan(catchBlock.getAnnotations());
@@ -328,6 +339,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(catchBlock);
 	}
 
+	@Override
 	public <T> void visitCtClass(CtClass<T> ctClass) {
 		enter(ctClass);
 		scan(ctClass.getAnnotations());
@@ -342,6 +354,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(ctClass);
 	}
 
+	@Override
 	public <T> void visitCtConditional(CtConditional<T> conditional) {
 		enter(conditional);
 		scan(conditional.getAnnotations());
@@ -351,6 +364,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(conditional);
 	}
 
+	@Override
 	public <T> void visitCtConstructor(CtConstructor<T> c) {
 		enter(c);
 		scan(c.getAnnotations());
@@ -361,6 +375,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(c);
 	}
 
+	@Override
 	public void visitCtContinue(CtContinue continueStatement) {
 		enter(continueStatement);
 		scan(continueStatement.getAnnotations());
@@ -368,6 +383,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(continueStatement);
 	}
 
+	@Override
 	public void visitCtDo(CtDo doLoop) {
 		enter(doLoop);
 		scan(doLoop.getAnnotations());
@@ -376,6 +392,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(doLoop);
 	}
 
+	@Override
 	public <T extends Enum<?>> void visitCtEnum(CtEnum<T> ctEnum) {
 		enter(ctEnum);
 		scan(ctEnum.getAnnotations());
@@ -386,6 +403,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(ctEnum);
 	}
 
+	@Override
 	public <T> void visitCtExecutableReference(CtExecutableReference<T> reference) {
 		enterReference(reference);
 		scan(reference.getDeclaringType());
@@ -394,6 +412,7 @@ public abstract class CtScanner implements CtVisitor {
 		exitReference(reference);
 	}
 
+	@Override
 	public <T> void visitCtField(CtField<T> f) {
 		enter(f);
 		scan(f.getAnnotations());
@@ -411,6 +430,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(thisAccess);
 	}
 
+	@Override
 	public <T> void visitCtAnnotationFieldAccess(CtAnnotationFieldAccess<T> annotationFieldAccess) {
 		enter(annotationFieldAccess);
 		scan(annotationFieldAccess.getAnnotations());
@@ -421,6 +441,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(annotationFieldAccess);
 	}
 
+	@Override
 	public <T> void visitCtFieldReference(CtFieldReference<T> reference) {
 		enterReference(reference);
 		scan(reference.getDeclaringType());
@@ -428,6 +449,7 @@ public abstract class CtScanner implements CtVisitor {
 		exitReference(reference);
 	}
 
+	@Override
 	public void visitCtFor(CtFor forLoop) {
 		enter(forLoop);
 		scan(forLoop.getAnnotations());
@@ -438,6 +460,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(forLoop);
 	}
 
+	@Override
 	public void visitCtForEach(CtForEach foreach) {
 		enter(foreach);
 		scan(foreach.getAnnotations());
@@ -447,15 +470,17 @@ public abstract class CtScanner implements CtVisitor {
 		exit(foreach);
 	}
 
+	@Override
 	public void visitCtIf(CtIf ifElement) {
 		enter(ifElement);
 		scan(ifElement.getAnnotations());
 		scan(ifElement.getCondition());
-		scan((CtStatement) ifElement.getThenStatement());
-		scan((CtStatement) ifElement.getElseStatement());
+		scan(ifElement.getThenStatement());
+		scan(ifElement.getElseStatement());
 		exit(ifElement);
 	}
 
+	@Override
 	public <T> void visitCtInterface(CtInterface<T> intrface) {
 		enter(intrface);
 		scan(intrface.getAnnotations());
@@ -467,6 +492,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(intrface);
 	}
 
+	@Override
 	public <T> void visitCtInvocation(CtInvocation<T> invocation) {
 		enter(invocation);
 		scan(invocation.getAnnotations());
@@ -478,6 +504,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(invocation);
 	}
 
+	@Override
 	public <T> void visitCtLiteral(CtLiteral<T> literal) {
 		enter(literal);
 		scan(literal.getAnnotations());
@@ -487,6 +514,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(literal);
 	}
 
+	@Override
 	public <T> void visitCtLocalVariable(CtLocalVariable<T> localVariable) {
 		enter(localVariable);
 		scan(localVariable.getAnnotations());
@@ -495,12 +523,14 @@ public abstract class CtScanner implements CtVisitor {
 		exit(localVariable);
 	}
 
+	@Override
 	public <T> void visitCtLocalVariableReference(CtLocalVariableReference<T> reference) {
 		enterReference(reference);
 		scan(reference.getType());
 		exitReference(reference);
 	}
 
+	@Override
 	public <T> void visitCtCatchVariable(CtCatchVariable<T> catchVariable) {
 		enter(catchVariable);
 		scan(catchVariable.getAnnotations());
@@ -508,12 +538,14 @@ public abstract class CtScanner implements CtVisitor {
 		exit(catchVariable);
 	}
 
+	@Override
 	public <T> void visitCtCatchVariableReference(CtCatchVariableReference<T> reference) {
 		enterReference(reference);
 		scan(reference.getType());
 		exitReference(reference);
 	}
 
+	@Override
 	public <T> void visitCtMethod(CtMethod<T> m) {
 		enter(m);
 		scan(m.getAnnotations());
@@ -525,6 +557,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(m);
 	}
 
+	@Override
 	public <T> void visitCtNewArray(CtNewArray<T> newArray) {
 		enter(newArray);
 		scan(newArray.getAnnotations());
@@ -547,6 +580,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(ctConstructorCall);
 	}
 
+	@Override
 	public <T> void visitCtNewClass(CtNewClass<T> newClass) {
 		enter(newClass);
 		scan(newClass.getAnnotations());
@@ -582,6 +616,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(expression);
 	}
 
+	@Override
 	public <T, A extends T> void visitCtOperatorAssignment(CtOperatorAssignment<T, A> assignment) {
 		enter(assignment);
 		scan(assignment.getAnnotations());
@@ -592,6 +627,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(assignment);
 	}
 
+	@Override
 	public void visitCtPackage(CtPackage ctPackage) {
 		enter(ctPackage);
 		scan(ctPackage.getAnnotations());
@@ -603,11 +639,13 @@ public abstract class CtScanner implements CtVisitor {
 		exit(ctPackage);
 	}
 
+	@Override
 	public void visitCtPackageReference(CtPackageReference reference) {
 		enterReference(reference);
 		exitReference(reference);
 	}
 
+	@Override
 	public <T> void visitCtParameter(CtParameter<T> parameter) {
 		enter(parameter);
 		scan(parameter.getAnnotations());
@@ -615,12 +653,14 @@ public abstract class CtScanner implements CtVisitor {
 		exit(parameter);
 	}
 
+	@Override
 	public <T> void visitCtParameterReference(CtParameterReference<T> reference) {
 		enterReference(reference);
 		scan(reference.getType());
 		exitReference(reference);
 	}
 
+	@Override
 	public <R> void visitCtReturn(CtReturn<R> returnStatement) {
 		enter(returnStatement);
 		scan(returnStatement.getAnnotations());
@@ -628,6 +668,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(returnStatement);
 	}
 
+	@Override
 	public <R> void visitCtStatementList(CtStatementList statements) {
 		enter(statements);
 		scan(statements.getAnnotations());
@@ -635,6 +676,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(statements);
 	}
 
+	@Override
 	public <S> void visitCtSwitch(CtSwitch<S> switchStatement) {
 		enter(switchStatement);
 		scan(switchStatement.getAnnotations());
@@ -643,6 +685,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(switchStatement);
 	}
 
+	@Override
 	public void visitCtSynchronized(CtSynchronized synchro) {
 		enter(synchro);
 		scan(synchro.getAnnotations());
@@ -651,6 +694,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(synchro);
 	}
 
+	@Override
 	public void visitCtThrow(CtThrow throwStatement) {
 		enter(throwStatement);
 		scan(throwStatement.getAnnotations());
@@ -658,6 +702,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(throwStatement);
 	}
 
+	@Override
 	public void visitCtTry(CtTry tryBlock) {
 		enter(tryBlock);
 		scan(tryBlock.getAnnotations());
@@ -678,6 +723,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(tryWithResource);
 	}
 
+	@Override
 	public void visitCtTypeParameter(CtTypeParameter typeParameter) {
 		enter(typeParameter);
 		scan(typeParameter.getAnnotations());
@@ -685,6 +731,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(typeParameter);
 	}
 
+	@Override
 	public void visitCtTypeParameterReference(CtTypeParameterReference ref) {
 		enterReference(ref);
 		scan(ref.getPackage());
@@ -694,6 +741,7 @@ public abstract class CtScanner implements CtVisitor {
 		exitReference(ref);
 	}
 
+	@Override
 	public <T> void visitCtTypeReference(CtTypeReference<T> reference) {
 		enterReference(reference);
 		scan(reference.getPackage());
@@ -720,6 +768,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(typeAccess);
 	}
 
+	@Override
 	public <T> void visitCtUnaryOperator(CtUnaryOperator<T> operator) {
 		enter(operator);
 		scan(operator.getAnnotations());
@@ -739,6 +788,7 @@ public abstract class CtScanner implements CtVisitor {
 		exit(variableAccess);
 	}
 
+	@Override
 	public <T> void visitCtVariableRead(CtVariableRead<T> variableRead) {
 		visitCtVariableAccess(variableRead);
 	}
@@ -748,6 +798,7 @@ public abstract class CtScanner implements CtVisitor {
 		visitCtVariableAccess(variableWrite);
 	}
 
+	@Override
 	public void visitCtWhile(CtWhile whileLoop) {
 		enter(whileLoop);
 		scan(whileLoop.getAnnotations());
@@ -756,12 +807,15 @@ public abstract class CtScanner implements CtVisitor {
 		exit(whileLoop);
 	}
 
+	@Override
 	public <T> void visitCtCodeSnippetExpression(CtCodeSnippetExpression<T> expression) {
 	}
 
+	@Override
 	public void visitCtCodeSnippetStatement(CtCodeSnippetStatement statement) {
 	}
 
+	@Override
 	public <T> void visitCtUnboundVariableReference(CtUnboundVariableReference<T> reference) {
 
 	}
@@ -813,6 +867,7 @@ public abstract class CtScanner implements CtVisitor {
 		enterBinding(b);
 		scanBinding(b.getFields());
 		scanBinding(b.getMethods());
+		scanBinding(b.getInnerTypes());
 		exitBinding(b);
 		bindingRec.put(b, 1);
 	}

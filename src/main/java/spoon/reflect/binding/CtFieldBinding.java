@@ -18,5 +18,14 @@ public interface CtFieldBinding extends CtBinding {
 
 	boolean isStatic();
 
+	boolean isPublic();
+
+	boolean isPrivate();
+
+	<T extends CtFieldBinding> T setPublic(boolean ispublic);
+
+	<T extends CtFieldBinding> T setPrivate(boolean isprivate);
+
+	@Override
 	CtFieldReference<?> getReference();
 }

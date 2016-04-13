@@ -23,7 +23,9 @@ public class CtFieldBindingImpl implements CtFieldBinding, Serializable {
 
 	private CtTypeBinding declaringType;
 
-	private boolean isStat;
+	private boolean isstat;
+	private boolean ispublic;
+	private boolean isprivate;
 
 	@Override
 	public <T extends CtFieldBinding> T setSimpleName(String name) {
@@ -84,13 +86,35 @@ public class CtFieldBindingImpl implements CtFieldBinding, Serializable {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends CtFieldBinding> T setStatic(boolean isstatic) {
-		isStat = isstatic;
+		isstat = isstatic;
 		return (T) this;
 	}
 
 	@Override
 	public boolean isStatic() {
-		return isStat;
+		return isstat;
+	}
+
+	@Override
+	public boolean isPublic() {
+		return ispublic;
+	}
+
+	@Override
+	public boolean isPrivate() {
+		return isprivate;
+	}
+
+	@Override
+	public <T extends CtFieldBinding> T setPublic(boolean ispublic) {
+		this.ispublic = ispublic;
+		return (T) this;
+	}
+
+	@Override
+	public <T extends CtFieldBinding> T setPrivate(boolean isprivate) {
+		this.isprivate = isprivate;
+		return (T) this;
 	}
 
 }

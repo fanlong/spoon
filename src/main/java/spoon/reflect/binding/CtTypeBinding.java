@@ -49,4 +49,6 @@ public interface CtTypeBinding extends CtBinding {
 	String getFullName();
 
 	boolean isPrimitive();
+	boolean isArray();
+	boolean isPrimitiveArray();
 }
