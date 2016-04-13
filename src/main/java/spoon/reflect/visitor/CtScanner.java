@@ -60,6 +60,7 @@ import spoon.reflect.code.CtNewArray;
 import spoon.reflect.code.CtNewClass;
 import spoon.reflect.code.CtOperatorAssignment;
 import spoon.reflect.code.CtReturn;
+import spoon.reflect.code.CtStatement;
 import spoon.reflect.code.CtStatementList;
 import spoon.reflect.code.CtSuperAccess;
 import spoon.reflect.code.CtSwitch;
@@ -475,8 +476,8 @@ public abstract class CtScanner implements CtVisitor {
 		enter(ifElement);
 		scan(ifElement.getAnnotations());
 		scan(ifElement.getCondition());
-		scan(ifElement.getThenStatement());
-		scan(ifElement.getElseStatement());
+		scan((CtStatement) ifElement.getThenStatement());
+		scan((CtStatement) ifElement.getElseStatement());
 		exit(ifElement);
 	}
 

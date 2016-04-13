@@ -35,20 +35,26 @@ public class SpoonTreeBuilder extends CtScanner {
 	private static String getBindingPrefix(CtBinding b) {
 		String prefix = "";
 		if (b instanceof CtFieldBinding) {
-			if (((CtFieldBinding) b).isPublic())
+			if (((CtFieldBinding) b).isPublic()) {
 				prefix += "public ";
-			if (((CtFieldBinding) b).isPrivate())
+			}
+			if (((CtFieldBinding) b).isPrivate()) {
 				prefix += "private ";
-			if (((CtFieldBinding) b).isStatic())
+			}
+			if (((CtFieldBinding) b).isStatic()) {
 				prefix += "static ";
+			}
 		}
 		if (b instanceof CtMethodBinding) {
-			if (((CtMethodBinding) b).isPublic())
+			if (((CtMethodBinding) b).isPublic()) {
 				prefix += "public ";
-			if (((CtMethodBinding) b).isPrivate())
+			}
+			if (((CtMethodBinding) b).isPrivate()) {
 				prefix += "private ";
-			if (((CtMethodBinding) b).isStatic())
+			}
+			if (((CtMethodBinding) b).isStatic()) {
 				prefix += "static ";
+			}
 		}
 		return prefix;
 	}

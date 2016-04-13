@@ -82,8 +82,9 @@ public class CtTypeBindingImpl implements CtTypeBinding, Serializable {
 	@Override
 	public boolean isPrimitiveArray() {
 		String a = getSimpleName();
-		while (a.endsWith("[]"))
+		while (a.endsWith("[]")) {
 			a = a.substring(0, a.length() - 2);
+		}
 		return ("boolean".equals(a) || "byte".equals(a) || "double".equals(a) || "int".equals(a) || "short".equals(a)
 				|| "char".equals(a) || "long".equals(a) || "float".equals(a) || "void".equals(a));
 	}
